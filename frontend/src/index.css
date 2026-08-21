@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* Design tokens lifted from the "Fluxo Sobrio" mockup — muted neutrals with
+   one purple accent. Kept as Tailwind v4 @theme vars so every page gets
+   bg-page/text-ink/border-border/etc. utilities for free. */
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-page: #f6f5f2;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fbfaf8;
+  --color-border: #e7e4de;
+  --color-border-light: #f0ede7;
+  --color-ink: #201f1d;
+  --color-ink-muted: #6e6a63;
+  --color-ink-faint: #8b867d;
+
+  --color-accent: #5b50e6;
+  --color-accent-hover: #4a40c9;
+  --color-accent-light: #eeecfc;
+
+  --color-success: #1fa97a;
+  --color-success-ink: #1b8a5a;
+  --color-success-light: #edf9f1;
+  --color-success-border: #c7e8d2;
+
+  --color-warning: #e0862a;
+
+  --color-danger: #d8534e;
+  --color-danger-light: #fae8e7;
+  --color-danger-border: #f2d7d6;
+
+  --color-kanban-column: #efede8;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ddd9d1;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fade-up {
+  animation: fadeUp 0.3s ease;
+}
