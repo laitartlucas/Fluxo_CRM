@@ -14,9 +14,14 @@ import { TasksPage } from './pages/TasksPage'
 import { InviteMemberPage } from './pages/InviteMemberPage'
 import { AgendaPage } from './pages/AgendaPage'
 import { FinanceiroPage } from './pages/FinanceiroPage'
-import { MensagensPage } from './pages/MensagensPage'
+import { ConversasPage } from './pages/ConversasPage'
 import { MarketingPage } from './pages/MarketingPage'
 import { CustomerSuccessPage } from './pages/CustomerSuccessPage'
+import { DisparosPage } from './pages/DisparosPage'
+import { FluxosPage } from './pages/FluxosPage'
+import { AtendenteIAPage } from './pages/AtendenteIAPage'
+import { ContasPage } from './pages/ContasPage'
+import { AjustesPage } from './pages/AjustesPage'
 
 export default function App() {
   return (
@@ -36,9 +41,14 @@ export default function App() {
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/agenda" element={<AgendaPage />} />
           <Route path="/financeiro" element={<FinanceiroPage />} />
-          <Route path="/mensagens" element={<MensagensPage />} />
+          <Route path="/conversas" element={<ConversasPage />} />
           <Route path="/marketing" element={<MarketingPage />} />
           <Route path="/sucesso-cliente" element={<CustomerSuccessPage />} />
+          <Route path="/disparos" element={<DisparosPage />} />
+          <Route path="/fluxos" element={<FluxosPage />} />
+          <Route path="/atendente-ia" element={<AtendenteIAPage />} />
+          <Route path="/contas" element={<ContasPage />} />
+          <Route path="/ajustes" element={<AjustesPage />} />
           <Route path="/invite" element={<InviteMemberPage />} />
         </Route>
       </Route>

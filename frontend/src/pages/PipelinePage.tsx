@@ -48,7 +48,7 @@ export function PipelinePage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('opportunities')
-        .select('id, name, pipeline_id, stage_id, company_id, owner_id, value, currency, status')
+        .select('id, name, pipeline_id, stage_id, company_id, owner_id, value, currency, status, next_action_at, next_action_note')
         .eq('pipeline_id', activePipelineId!)
         .order('updated_at', { ascending: false })
       if (error) throw error
@@ -173,6 +173,12 @@ function OpportunityCard({ opportunity }: { opportunity: Opportunity }) {
           {opportunity.name}
         </Link>
         <p className="mt-1 text-xs text-ink-muted">{formatCurrency(Number(opportunity.value))}</p>
+        {opportunity.next_action_at && (
+          <p className={`mt-1.5 text-[11px] font-semibold ${new Date(opportunity.next_action_at) < new Date() ? 'text-danger' : 'text-ink-muted'}`}>
+            {new Date(opportunity.next_action_at) < new Date() ? 'Atrasado: ' : 'Próxima ação: '}
+            {opportunity.next_action_note ?? new Date(opportunity.next_action_at).toLocaleDateString('pt-BR')}
+          </p>
+        )}
       </Card>
     </div>
   )

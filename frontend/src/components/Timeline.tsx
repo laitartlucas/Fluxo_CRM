@@ -6,7 +6,7 @@ import { formatDateTime, relatedLabel } from '../lib/format'
 import { useRealtimeTable } from '../hooks/useRealtimeTable'
 
 interface TimelineProps {
-  relatedToType: 'company' | 'contact' | 'opportunity' | 'task'
+  relatedToType: 'company' | 'contact' | 'opportunity' | 'task' | 'conversation'
   relatedToId: string
 }
 
@@ -76,6 +76,22 @@ function TimelineDetail({ row }: { row: TimelineRow }) {
   if (row.activity_type === 'opportunity_reopened') {
     const p = row.payload as { reason?: string }
     return <p className="text-xs text-ink-muted">Motivo: {p.reason}</p>
+  }
+  if (row.activity_type === 'message_received' || row.activity_type === 'message_sent_ai' || row.activity_type === 'message_sent_human') {
+    const p = row.payload as { content_type?: string; preview?: string }
+    return <p className="text-xs text-ink-muted">{p.content_type === 'audio' ? '[áudio]' : p.preview}</p>
+  }
+  if (row.activity_type === 'conversation_assigned') {
+    return <p className="text-xs text-ink-muted">Conversa reatribuída</p>
+  }
+  if (row.activity_type === 'ai_prompt_audit') {
+    const p = row.payload as { model?: string; response_text?: string; handoff?: boolean }
+    return (
+      <p className="text-xs text-ink-muted">
+        [{p.model}] {p.response_text}
+        {p.handoff && ' · transferida para atendimento humano'}
+      </p>
+    )
   }
   return null
 }

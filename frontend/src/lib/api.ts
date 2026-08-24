@@ -79,3 +79,46 @@ export function summarizeOpportunityTimeline(opportunityId: string) {
     { opportunity_id: opportunityId }
   )
 }
+
+// ============ Comunicação Omnichannel (adendo) ============
+// Os webhooks e o motor de disparo (send-campaign-batch) nunca são
+// chamados a partir do frontend — só estas duas, que precisam do JWT do
+// usuário logado (envio manual do inbox / upload de base de conhecimento).
+
+export function sendConversationMessage(
+  conversationId: string,
+  content: string,
+  contentType: 'text' | 'image' | 'audio' | 'video' | 'document' = 'text'
+) {
+  return invoke<{ message: { id: string; sent_at: string } }>('send-conversation-message', {
+    conversation_id: conversationId,
+    content,
+    content_type: contentType,
+  })
+}
+
+export function checkChannelStatus(channelId: string) {
+  return invoke<{ channel: { id: string; status: string; quality_rating: string | null; connected_at: string | null } }>(
+    'check-channel-status',
+    { channel_id: channelId }
+  )
+}
+
+export function uploadKnowledgeDocument(params: {
+  aiAgentConfigId: string
+  sourceType: 'pdf' | 'link' | 'text'
+  sourceUrl?: string
+  content?: string
+  fileBase64?: string
+}) {
+  return invoke<{ document: { id: string; source_type: string; source_url: string | null; created_at: string }; content_length: number }>(
+    'upload-knowledge-document',
+    {
+      ai_agent_config_id: params.aiAgentConfigId,
+      source_type: params.sourceType,
+      source_url: params.sourceUrl,
+      content: params.content,
+      file_base64: params.fileBase64,
+    }
+  )
+}
