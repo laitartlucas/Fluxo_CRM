@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../lib/supabase'
@@ -49,6 +49,45 @@ export function OpportunityDetailPage() {
     },
   })
 
+  // Uma opportunity pode ter 0..N conversas apontando pra ela (relação
+  // inversa de conversations.opportunity_id, ver 0037) — a "ativa" é
+  // sempre a mais recente por last_message_at.
+  const { data: activeConversation } = useQuery({
+    queryKey: ['opportunity-active-conversation', id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('conversations')
+        .select('id, status, channels(display_name, type)')
+        .eq('opportunity_id', id!)
+        .order('last_message_at', { ascending: false, nullsFirst: false })
+        .limit(1)
+        .maybeSingle<{ id: string; status: string; channels: { display_name: string; type: string } | null }>()
+      if (error) throw error
+      return data
+    },
+  })
+
+  const [nextActionNote, setNextActionNote] = useState('')
+  const [nextActionAt, setNextActionAt] = useState('')
+  const nextActionMutation = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from('opportunities').update({
+        next_action_at: nextActionAt || null,
+        next_action_note: nextActionNote || null,
+      }).eq('id', id!)
+      if (error) throw error
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+  })
+
+  useEffect(() => {
+    if (opportunity) {
+      setNextActionNote(opportunity.next_action_note ?? '')
+      setNextActionAt(opportunity.next_action_at ? opportunity.next_action_at.slice(0, 16) : '')
+    }
+  }, [opportunity])
+
   const reopenMutation = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.rpc('reopen_opportunity', {
@@ -87,6 +126,11 @@ export function OpportunityDetailPage() {
           <p className="text-sm text-ink-muted">
             {company && <Link to={`/companies/${company.id}`} className="text-accent hover:underline">{company.name}</Link>}
           </p>
+          {activeConversation && (
+            <Link to="/conversas" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline">
+              Ver conversa ativa ({activeConversation.channels?.display_name ?? activeConversation.channels?.type})
+            </Link>
+          )}
         </div>
         <PresenceBar room={`opportunity:${opportunity.id}`} />
       </div>
@@ -104,6 +148,26 @@ export function OpportunityDetailPage() {
             <p>Estágio: {stage?.name ?? '—'}</p>
             {opportunity.expected_close_date && <p>Previsão de fechamento: {opportunity.expected_close_date}</p>}
             {opportunity.closed_at && <p>Fechado em: {new Date(opportunity.closed_at).toLocaleString('pt-BR')}</p>}
+
+            <div className="space-y-1.5 rounded-md border border-border p-3">
+              <label className="block text-xs font-medium text-ink-muted">Próxima ação</label>
+              <input
+                type="datetime-local"
+                value={nextActionAt}
+                onChange={(e) => setNextActionAt(e.target.value)}
+                className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              />
+              <textarea
+                className="w-full rounded-md border border-border px-3 py-2 text-sm"
+                rows={2}
+                placeholder="Ex: Ligar para confirmar proposta"
+                value={nextActionNote}
+                onChange={(e) => setNextActionNote(e.target.value)}
+              />
+              <Button variant="secondary" onClick={() => nextActionMutation.mutate()} disabled={nextActionMutation.isPending}>
+                {nextActionMutation.isPending ? 'Salvando…' : 'Salvar próxima ação'}
+              </Button>
+            </div>
 
             {isClosed && (
               <div className="pt-2">

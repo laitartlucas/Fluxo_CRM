@@ -14,7 +14,7 @@ const comercialItems = [
   { to: '/contacts', label: 'Contatos', d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75' },
   { to: '/agenda', label: 'Agenda', d: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z' },
   { to: '/financeiro', label: 'Financeiro', d: 'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' },
-  { to: '/mensagens', label: 'Mensagens', d: 'M4 5h16v11H9l-5 4zM8 9h8M8 12h5' },
+  { to: '/conversas', label: 'Conversas', d: 'M4 5h16v11H9l-5 4zM8 9h8M8 12h5' },
 ]
 
 const otherItems = [
@@ -22,6 +22,11 @@ const otherItems = [
   { to: '/tasks', label: 'Tarefas', d: 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11' },
   { to: '/marketing', label: 'Marketing', d: 'M3 11l18-8-8 18-2-8-8-2z' },
   { to: '/sucesso-cliente', label: 'Sucesso do Cliente', d: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 3.6-6 8-6s8 2 8 6' },
+  { to: '/disparos', label: 'Disparos', d: 'M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z' },
+  { to: '/fluxos', label: 'Fluxos', d: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z' },
+  { to: '/atendente-ia', label: 'Atendente IA', d: 'M12 2v4M8 6h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM9 12h.01M15 12h.01M9 16h6' },
+  { to: '/contas', label: 'Contas', d: 'M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1' },
+  { to: '/ajustes', label: 'Ajustes', d: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z' },
 ]
 
 function NavItem({ to, label, d }: { to: string; label: string; d: string }) {
