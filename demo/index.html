@@ -465,6 +465,23 @@
   .composer-row { display: flex; gap: 10px; align-items: flex-end; }
   .composer-row textarea { flex: 1; min-height: 42px; max-height: 120px; }
 
+  .conv-back { display: none; flex-shrink: 0; padding: 8px; }
+  .row-link-hint {
+    margin-left: auto; flex-shrink: 0; color: var(--ink-faint); font-size: 11px; font-weight: 600;
+    opacity: 0; transition: opacity 150ms ease;
+  }
+  .data-table tr.row-link:hover .row-link-hint,
+  .cliente-card:hover .row-link-hint { opacity: 1; }
+  .data-table tr.row-link { cursor: pointer; }
+
+  @media (max-width: 980px) {
+    .conv-list-pane { flex: 1 1 auto; width: 100%; }
+    .conv-thread-pane { display: none; }
+    .conversas-layout.show-thread .conv-list-pane { display: none; }
+    .conversas-layout.show-thread .conv-thread-pane { display: flex; flex: 1 1 auto; width: 100%; }
+    .conv-back { display: inline-flex; }
+  }
+
   /* ---------- Oportunidades ---------- */
   .kanban-wrap { overflow-x: auto; padding-bottom: 8px; }
   .kanban { display: flex; gap: 16px; min-width: 900px; }
@@ -487,6 +504,19 @@
   }
   .opp-card:active { cursor: grabbing; }
   .opp-card.dragging { opacity: 0.4; }
+  .opp-card.pulse { animation: cardPulse 700ms ease-out 2; border-color: var(--accent); }
+  @keyframes cardPulse {
+    0% { box-shadow: 0 0 0 0 var(--accent-soft-border); }
+    70% { box-shadow: 0 0 0 7px rgba(124,92,250,0); }
+    100% { box-shadow: 0 0 0 0 rgba(124,92,250,0); }
+  }
+  .opp-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+  .opp-chat-btn {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 7px; background: transparent;
+    border: none; color: var(--ink-faint); cursor: pointer; display: grid; place-items: center;
+  }
+  .opp-chat-btn:hover { background: var(--accent-soft); color: var(--accent-strong); }
+  .opp-chat-btn svg { width: 14px; height: 14px; }
   .opp-name { font-weight: 600; font-size: 13px; }
   .opp-plan { font-size: 12px; color: var(--ink-muted); }
   .opp-value { font-size: 13.5px; font-weight: 600; }
@@ -501,6 +531,7 @@
   .cliente-plan { font-size: 12.5px; color: var(--ink-muted); }
   .cliente-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 6px 0; border-top: 1px solid var(--line-soft); }
   .cliente-row-label { color: var(--ink-faint); }
+  .cliente-card-foot { margin-top: 12px; }
 
   /* ---------- Pessoas ---------- */
   .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
@@ -682,7 +713,7 @@
       <div class="avatar">AB</div>
       <div class="sidebar-footer-text">
         <div class="sidebar-footer-name">Ana Beatriz Menezes</div>
-        <a class="sidebar-footer-link" href="#" onclick="return false;">Sair</a>
+        <a class="sidebar-footer-link" href="#" id="sair-link">Sair</a>
       </div>
     </div>
   </aside>
@@ -730,7 +761,7 @@
       <div class="conversas-layout">
         <div class="conv-list-pane">
           <div class="conv-list-head">
-            <div class="conv-list-count">52 conversas</div>
+            <div class="conv-list-count" id="conv-count">12 conversas</div>
             <div class="pill-toggle" id="conv-channel-filter">
               <button data-channel="todas" class="active">Todas</button>
               <button data-channel="whatsapp">WhatsApp</button>
@@ -1176,6 +1207,11 @@
     item.addEventListener('click', function () { go(item.dataset.view); });
   });
 
+  qs('#sair-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    showToast('Demonstração — login desabilitado nesta prévia.');
+  });
+
   /* ============================= PAINEL ============================= */
 
   function renderPainel() {
@@ -1306,6 +1342,8 @@
       return true;
     }).sort(function (a, b) { return a.recencia - b.recencia; });
 
+    qs('#conv-count').textContent = list.length + (list.length === 1 ? ' conversa' : ' conversas');
+
     if (!list.length) {
       body.innerHTML = '<div class="empty-state">Nenhuma conversa encontrada.</div>';
       return;
@@ -1318,7 +1356,7 @@
         '<div class="cr-body">' +
           '<div class="cr-top"><span class="cr-name">' + esc(p.nome) + '</span><span class="cr-time mono">' + esc(formatRelative(p.recencia)) + '</span></div>' +
           '<div class="cr-msg">' + esc(lastMsg.texto) + '</div>' +
-          '<div class="cr-meta">' + channelDot(p.channel) + (p.channel === 'whatsapp' ? esc(p.contato) : esc(p.contato)) +
+          '<div class="cr-meta">' + channelDot(p.channel) + esc(p.contato) +
             (p.aiPaused ? '<span class="badge badge-warn" style="margin-left:4px;">IA pausada</span>' : '') +
             (p.atendente ? '<span style="margin-left:auto;">' + esc(p.atendente) + '</span>' : '') +
           '</div>' +
@@ -1342,13 +1380,19 @@
 
     composerMode = 'public';
 
+    qs('.conversas-layout').classList.add('show-thread');
+
     pane.innerHTML =
       '<div class="thread-head">' +
+        '<button class="conv-back" id="conv-back" aria-label="Voltar para a lista de conversas" title="Voltar para a lista">' +
+          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M12.5 4.5L6 10l6.5 5.5"></path></svg>' +
+        '</button>' +
         '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
         '<div class="thread-head-info">' +
           '<div class="thread-head-name">' + esc(p.nome) + '</div>' +
           '<div class="thread-head-sub">' + channelDot(p.channel) + '<span class="mono">' + esc(p.contato) + '</span></div>' +
         '</div>' +
+        '<button class="btn btn-ghost btn-sm" id="thread-view-opp">Ver oportunidade</button>' +
         '<div class="thread-ai-toggle"><span>IA ativa</span><button class="switch' + (p.aiPaused ? '' : ' on') + '" id="ai-toggle" aria-label="Alternar IA ativa"></button></div>' +
       '</div>' +
       '<div class="pinned-note" id="pinned-note">' +
@@ -1373,6 +1417,15 @@
       p.aiPaused = !p.aiPaused;
       this.classList.toggle('on', !p.aiPaused);
       renderConvList();
+    });
+
+    qs('#conv-back').addEventListener('click', function () {
+      qs('.conversas-layout').classList.remove('show-thread');
+    });
+
+    qs('#thread-view-opp').addEventListener('click', function () {
+      highlightOppId = p.id;
+      go('oportunidades');
     });
 
     var pinnedNoteEl = qs('#pinned-note');
@@ -1447,6 +1500,7 @@
   /* ============================= OPORTUNIDADES ============================= */
 
   var draggedId = null;
+  var highlightOppId = null;
 
   function renderOportunidades() {
     var total = DB.people.length;
@@ -1471,7 +1525,12 @@
 
     function cardHtml(p) {
       return '<div class="opp-card" draggable="true" data-id="' + p.id + '">' +
-        '<div class="opp-name">' + esc(p.nome) + '</div>' +
+        '<div class="opp-card-top">' +
+          '<div class="opp-name">' + esc(p.nome) + '</div>' +
+          '<button class="opp-chat-btn" data-person="' + p.id + '" aria-label="Ver conversa" title="Ver conversa">' +
+            '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2H8l-3.5 3v-3H5c-1.1 0-2-.9-2-2v-6z"></path></svg>' +
+          '</button>' +
+        '</div>' +
         (p.plano ? '<div class="opp-plan">' + esc(p.plano) + '</div>' : '') +
         '<div class="opp-value mono">' + formatBRL(p.valor) + '</div>' +
         '<div class="opp-tags">' + tempBadge(p.temperatura) + origemBadge(p.origem) + '</div>' +
@@ -1485,6 +1544,22 @@
       });
       card.addEventListener('dragend', function () { card.classList.remove('dragging'); });
     });
+
+    qsa('.opp-chat-btn', kanban).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pendingSelectedPerson = btn.dataset.person;
+        go('conversas');
+      });
+    });
+
+    if (highlightOppId) {
+      var target = qs('.opp-card[data-id="' + highlightOppId + '"]', kanban);
+      if (target) {
+        target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        target.classList.add('pulse');
+      }
+      highlightOppId = null;
+    }
 
     qsa('.kanban-column', kanban).forEach(function (col) {
       col.addEventListener('dragover', function (e) { e.preventDefault(); col.classList.add('dragover'); });
@@ -1560,7 +1635,7 @@
 
     grid.innerHTML = clients.map(function (p) {
       var since = p.clienteDesde ? new Date(p.clienteDesde + 'T00:00:00').toLocaleDateString('pt-BR') : '—';
-      return '<div class="card">' +
+      return '<div class="card cliente-card">' +
         '<div class="cliente-card-top">' +
           '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
           '<div>' +
@@ -1571,8 +1646,18 @@
         '</div>' +
         '<div class="cliente-row"><span class="cliente-row-label">Valor pago</span><span class="mono">' + formatBRL(p.valor) + '</span></div>' +
         '<div class="cliente-row"><span class="cliente-row-label">Cliente desde</span><span class="mono">' + esc(since) + '</span></div>' +
+        '<div class="cliente-card-foot">' +
+          '<button class="btn btn-ghost btn-sm btn-block" data-person="' + p.id + '">Ver conversa</button>' +
+        '</div>' +
       '</div>';
     }).join('');
+
+    qsa('.cliente-card-foot button', grid).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pendingSelectedPerson = btn.dataset.person;
+        go('conversas');
+      });
+    });
   }
 
   qs('#clientes-search').addEventListener('input', renderClientes);
@@ -1597,14 +1682,21 @@
 
     tbody.innerHTML = rows.map(function (p) {
       var statusBadge = p.isClient ? '<span class="badge badge-good">Cliente</span>' : '<span class="badge badge-accent">' + esc(STAGE_LABELS[p.estagio]) + '</span>';
-      return '<tr>' +
+      return '<tr class="row-link" data-person="' + p.id + '">' +
         '<td><div class="person-name-cell"><div class="initials" style="width:28px;height:28px;font-size:10.5px;">' + esc(initials(p.nome)) + '</div>' + esc(p.nome) + '</div></td>' +
         '<td class="mono">' + channelDot(p.channel) + ' ' + esc(p.contato) + '</td>' +
         '<td>' + origemBadge(p.origem) + '</td>' +
-        '<td>' + statusBadge + '</td>' +
+        '<td>' + statusBadge + '<span class="row-link-hint">Ver conversa →</span></td>' +
         '<td>' + (p.atendente ? esc(p.atendente) : '<span style="color:var(--ink-faint);">—</span>') + '</td>' +
       '</tr>';
     }).join('');
+
+    qsa('tr.row-link', tbody).forEach(function (row) {
+      row.addEventListener('click', function () {
+        pendingSelectedPerson = row.dataset.person;
+        go('conversas');
+      });
+    });
   }
 
   qs('#pessoas-search').addEventListener('input', renderPessoas);
@@ -1800,7 +1892,19 @@
             '</div>';
           }).join('') +
         '</div>' +
-        '<button class="btn btn-ghost" style="margin-top:16px;">Enviar mídia</button>';
+        '<button class="btn btn-ghost" style="margin-top:16px;" id="ia-media-upload">Enviar mídia</button>';
+      qs('#ia-media-upload').addEventListener('click', function () {
+        var pool = [
+          { nome: 'Depoimento — Turma de Março.mp4', tipo: 'Vídeo · MP4', cor: 'linear-gradient(135deg,#7C5CFA,#9179FF)' },
+          { nome: 'Tabela de investimento.pdf', tipo: 'Documento · PDF', cor: 'linear-gradient(135deg,#3FCB8E,#2fae78)' },
+          { nome: 'Foto da imersão presencial.jpg', tipo: 'Imagem · JPG', cor: 'linear-gradient(135deg,#FF8F5E,#e8734a)' },
+          { nome: 'Roteiro de boas-vindas.pdf', tipo: 'Documento · PDF', cor: 'linear-gradient(135deg,#6FA8DC,#4f8fc9)' }
+        ];
+        var novo = pool[DB.media.length % pool.length];
+        DB.media.push(novo);
+        renderIaTabContent();
+        showToast('"' + novo.nome + '" enviada com sucesso.');
+      });
     } else if (iaActiveTab === 'base') {
       content.innerHTML = DB.knowledge.map(function (k, idx) {
         return '<div class="kb-item" data-idx="' + idx + '">' +
