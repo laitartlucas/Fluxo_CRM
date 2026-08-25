@@ -393,7 +393,7 @@
     padding: 6px 8px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-muted);
   }
   .pill-toggle button.active { background: var(--accent-soft); color: var(--accent-strong); }
-  .conv-list-body { flex: 1; overflow-y: auto; }
+  .conv-list-body { flex: 1; overflow-y: auto; overflow-x: hidden; }
   .conv-row {
     display: flex; gap: 10px; align-items: flex-start;
     padding: 12px 16px;
@@ -407,7 +407,10 @@
   .conv-row .cr-top { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
   .conv-row .cr-name { font-weight: 600; font-size: 13px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .conv-row .cr-time { font-size: 11px; color: var(--ink-faint); flex-shrink: 0; }
-  .conv-row .cr-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-faint); }
+  .conv-row .cr-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; font-size: 11px; color: var(--ink-faint); min-width: 0; width: 100%; }
+  .conv-row .cr-contact { display: flex; align-items: center; gap: 6px; max-width: 100%; overflow: hidden; white-space: nowrap; }
+  .conv-row .cr-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .conv-row .cr-atendente { white-space: nowrap; }
 
   .conv-thread-pane {
     flex: 1; min-width: 0;
@@ -1374,9 +1377,13 @@
         '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
         '<div class="cr-body">' +
           '<div class="cr-top"><span class="cr-name">' + esc(p.nome) + '</span><span class="cr-time mono">' + esc(formatRelative(p.recencia)) + '</span></div>' +
-          '<div class="cr-meta">' + channelDot(p.channel) + esc(p.contato) +
-            (p.aiPaused ? '<span class="badge badge-warn" style="margin-left:4px;">IA pausada</span>' : '') +
-            (p.atendente ? '<span style="margin-left:auto;">' + esc(p.atendente) + '</span>' : '') +
+          '<div class="cr-meta">' +
+            '<span class="cr-contact">' + channelDot(p.channel) + esc(p.contato) + '</span>' +
+            (p.aiPaused || p.atendente ?
+              '<span class="cr-tags">' +
+                (p.aiPaused ? '<span class="badge badge-warn">IA pausada</span>' : '') +
+                (p.atendente ? '<span class="cr-atendente">' + esc(p.atendente) + '</span>' : '') +
+              '</span>' : '') +
           '</div>' +
         '</div>' +
       '</button>';
