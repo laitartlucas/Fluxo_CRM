@@ -407,7 +407,6 @@
   .conv-row .cr-top { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
   .conv-row .cr-name { font-weight: 600; font-size: 13px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .conv-row .cr-time { font-size: 11px; color: var(--ink-faint); flex-shrink: 0; }
-  .conv-row .cr-msg { font-size: 12.5px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
   .conv-row .cr-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-faint); }
 
   .conv-thread-pane {
@@ -1371,12 +1370,10 @@
     }
 
     body.innerHTML = list.map(function (p) {
-      var lastMsg = p.mensagens[p.mensagens.length - 1];
       return '<button class="conv-row' + (p.id === selectedPersonId ? ' selected' : '') + '" data-person="' + p.id + '">' +
         '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
         '<div class="cr-body">' +
           '<div class="cr-top"><span class="cr-name">' + esc(p.nome) + '</span><span class="cr-time mono">' + esc(formatRelative(p.recencia)) + '</span></div>' +
-          '<div class="cr-msg">' + esc(lastMsg.texto) + '</div>' +
           '<div class="cr-meta">' + channelDot(p.channel) + esc(p.contato) +
             (p.aiPaused ? '<span class="badge badge-warn" style="margin-left:4px;">IA pausada</span>' : '') +
             (p.atendente ? '<span style="margin-left:auto;">' + esc(p.atendente) + '</span>' : '') +
