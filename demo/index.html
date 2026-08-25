@@ -45,7 +45,13 @@
   }
   h1, h2, h3 { font-family: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif; text-wrap: balance; margin: 0; color: var(--ink); }
   p { margin: 0; }
-  button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+  input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+  button {
+    font-family: inherit; font-size: inherit; color: inherit;
+    margin: 0; padding: 0; border: none; background: none;
+    appearance: none; -webkit-appearance: none;
+    text-align: inherit; cursor: pointer; display: inline-block;
+  }
   a { color: inherit; }
   svg { display: block; }
   ::selection { background: var(--accent-soft-border); color: var(--ink); }
@@ -396,8 +402,10 @@
   .conv-list-body { flex: 1; overflow-y: auto; overflow-x: hidden; }
   .conv-row {
     display: flex; gap: 10px; align-items: flex-start;
+    width: 100%;
     padding: 12px 16px;
     cursor: pointer;
+    border: none;
     border-bottom: 1px solid var(--line-soft);
     background: none;
   }
