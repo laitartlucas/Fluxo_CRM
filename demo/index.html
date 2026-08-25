@@ -1,0 +1,2038 @@
+<title>Plataforma Comercial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400..800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #0B0B12;
+    --surface: #14131E;
+    --surface-raised: #1C1A2A;
+    --surface-hover: #221F32;
+    --line: #2A2838;
+    --line-soft: #201E2C;
+    --ink: #F4F2F9;
+    --ink-muted: #9B95B3;
+    --ink-faint: #6A6480;
+    --accent: #7C5CFA;
+    --accent-strong: #9179FF;
+    --accent-soft: rgba(124, 92, 250, 0.14);
+    --accent-soft-border: rgba(124, 92, 250, 0.35);
+    --warm: #FF8F5E;
+    --warm-soft: rgba(255, 143, 94, 0.14);
+    --good: #3FCB8E;
+    --good-soft: rgba(63, 203, 142, 0.14);
+    --warn: #F0B155;
+    --warn-soft: rgba(240, 177, 85, 0.14);
+    --bad: #F2685B;
+    --bad-soft: rgba(242, 104, 91, 0.14);
+    --whatsapp: #3FCB8E;
+    --instagram: #E85C9A;
+    --cold: #6FA8DC;
+    --cold-soft: rgba(111, 168, 220, 0.14);
+  }
+
+  * , *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  h1, h2, h3 { font-family: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif; text-wrap: balance; margin: 0; color: var(--ink); }
+  p { margin: 0; }
+  button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+  a { color: inherit; }
+  svg { display: block; }
+  ::selection { background: var(--accent-soft-border); color: var(--ink); }
+
+  *:focus { outline: none; }
+  *:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .mono {
+    font-family: 'IBM Plex Mono', ui-monospace, "SF Mono", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- App shell ---------- */
+  .app-shell {
+    display: flex;
+    height: 100vh;
+    padding: 14px;
+    gap: 14px;
+    background: var(--ground);
+  }
+
+  .sidebar {
+    flex: 0 0 248px;
+    width: 248px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    overflow-y: auto;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px;
+    margin-bottom: 22px;
+  }
+  .brand-glyph {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: var(--accent);
+    display: grid; place-items: center;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .brand-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--ink-muted);
+    cursor: pointer;
+    position: relative;
+    font-size: 13.5px;
+    font-weight: 500;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .nav-item:hover { background: var(--surface-hover); color: var(--ink); }
+  .nav-item.active { background: var(--accent-soft); color: var(--accent-strong); }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 22%;
+    height: 56%;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--accent);
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    display: grid; place-items: center;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .sidebar-footer-text { min-width: 0; flex: 1; }
+  .sidebar-footer-name {
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sidebar-footer-link {
+    font-size: 12px; color: var(--ink-faint); text-decoration: none; cursor: default;
+  }
+  .sidebar-footer-link:hover { color: var(--ink-muted); }
+
+  .main {
+    flex: 1;
+    min-width: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+  }
+
+  .view { display: flex; flex-direction: column; min-height: 100%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .view.anim { animation: viewIn 220ms ease both; }
+  }
+  @keyframes viewIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .view h1 { font-size: 28px; font-weight: 700; margin-bottom: 24px; }
+  .view-head { margin-bottom: 24px; }
+  .view-sub { color: var(--ink-muted); font-size: 13.5px; margin-top: 6px; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-strong); }
+  .btn-ghost { background: transparent; border-color: var(--line); color: var(--ink); }
+  .btn-ghost:hover { background: var(--surface-hover); }
+  .btn-danger { background: var(--bad-soft); color: var(--bad); }
+  .btn-danger:hover { background: var(--bad); color: #fff; }
+  .btn-sm { padding: 6px 12px; font-size: 12.5px; }
+  .btn-block { width: 100%; }
+  .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+  /* ---------- Forms ---------- */
+  label { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; }
+  .field { margin-bottom: 16px; }
+  .input, select.input, textarea.input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink);
+    padding: 9px 12px;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .input::placeholder { color: var(--ink-faint); }
+  .input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  textarea.input { resize: vertical; min-height: 90px; font-family: inherit; }
+  .field-hint { font-size: 12px; color: var(--ink-faint); margin-top: 5px; }
+  .field-row { display: flex; gap: 12px; }
+  .field-row > .field { flex: 1; }
+
+  /* ---------- Cards ---------- */
+  .card {
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  /* ---------- Badges ---------- */
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-good { background: var(--good-soft); color: var(--good); }
+  .badge-warn { background: var(--warn-soft); color: var(--warn); }
+  .badge-bad { background: var(--bad-soft); color: var(--bad); }
+  .badge-accent { background: var(--accent-soft); color: var(--accent-strong); }
+  .badge-cold { background: var(--cold-soft); color: var(--cold); }
+  .badge-warm { background: var(--warm-soft); color: var(--warm); }
+  .badge-neutral { background: var(--surface-hover); color: var(--ink-muted); }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+  .dot-wa { background: var(--whatsapp); }
+  .dot-ig { background: var(--instagram); }
+
+  /* ---------- Toggle switch ---------- */
+  .switch {
+    width: 38px; height: 22px;
+    border-radius: 999px;
+    background: var(--line);
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .switch, .switch::after { transition: background 150ms ease, transform 150ms ease; }
+  }
+  .switch::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--ink-muted);
+    top: 2px; left: 2px;
+  }
+  .switch.on { background: var(--accent); }
+  .switch.on::after { background: #fff; transform: translateX(16px); }
+
+  /* ---------- Tabs ---------- */
+  .tabs { display: flex; gap: 22px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+  .tab-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 10px 2px 12px;
+    color: var(--ink-muted);
+    font-weight: 600; font-size: 13.5px;
+    position: relative;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active { color: var(--ink); }
+  .tab-btn.active::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent);
+  }
+
+  /* ---------- Painel ---------- */
+  .stats-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-top: 4px;
+  }
+  .stats-row::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 10%;
+    width: 480px; height: 260px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(124,92,250,0.30), transparent 60%),
+      radial-gradient(circle at 75% 60%, rgba(255,143,94,0.20), transparent 55%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .stat-tile { position: relative; z-index: 1; }
+  .stat-label { font-size: 12px; color: var(--ink-muted); font-weight: 500; margin-bottom: 10px; }
+  .stat-value { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; }
+
+  .painel-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; align-items: start; }
+  .card-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+  .chart-canvas-wrap { width: 100%; }
+
+  .recent-list { display: flex; flex-direction: column; gap: 2px; }
+  .recent-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: none; border: none; width: 100%; text-align: left;
+  }
+  .recent-row:hover { background: var(--surface-hover); }
+  .recent-row .rr-text { flex: 1; min-width: 0; }
+  .recent-row .rr-name { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+  .recent-row .rr-msg { color: var(--ink-muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-row .rr-time { color: var(--ink-faint); font-size: 11.5px; flex-shrink: 0; }
+
+  .initials {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 12px;
+    background: var(--surface-hover); color: var(--ink);
+    flex-shrink: 0;
+  }
+
+  /* ---------- Conversas ---------- */
+  .conversas-layout {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+    height: calc(100vh - 190px);
+  }
+  .conv-list-pane {
+    flex: 0 0 320px;
+    display: flex; flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-raised);
+    overflow: hidden;
+    min-height: 0;
+  }
+  .conv-list-head { padding: 16px 16px 12px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+  .conv-list-count { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 12px; }
+  .pill-toggle { display: flex; gap: 4px; background: var(--surface); border-radius: 10px; padding: 3px; margin-bottom: 10px; }
+  .pill-toggle button {
+    flex: 1; background: none; border: none; cursor: pointer;
+    padding: 6px 8px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-muted);
+  }
+  .pill-toggle button.active { background: var(--accent-soft); color: var(--accent-strong); }
+  .conv-list-body { flex: 1; overflow-y: auto; }
+  .conv-row {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--line-soft);
+    background: none;
+  }
+  .conv-row:hover { background: var(--surface-hover); }
+  .conv-row.selected { background: var(--accent-soft); }
+  .conv-row .cr-body { flex: 1; min-width: 0; }
+  .conv-row .cr-top { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+  .conv-row .cr-name { font-weight: 600; font-size: 13px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .conv-row .cr-time { font-size: 11px; color: var(--ink-faint); flex-shrink: 0; }
+  .conv-row .cr-msg { font-size: 12.5px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+  .conv-row .cr-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-faint); }
+
+  .conv-thread-pane {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-raised);
+    overflow: hidden;
+  }
+  .thread-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .thread-head-info { flex: 1; min-width: 0; }
+  .thread-head-name { font-weight: 700; font-size: 14.5px; }
+  .thread-head-sub { font-size: 12px; color: var(--ink-faint); display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  .thread-ai-toggle { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-muted); flex-shrink: 0; }
+
+  .pinned-note {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    padding: 9px 18px;
+    font-size: 12.5px;
+    flex-shrink: 0;
+    cursor: text;
+  }
+  .pinned-note svg { flex-shrink: 0; width: 15px; height: 15px; }
+  .pinned-note span { flex: 1; }
+  .pinned-note input {
+    flex: 1; background: transparent; border: none; border-bottom: 1px dashed var(--warn);
+    color: var(--warn); font-size: 12.5px; padding: 2px 0;
+  }
+  .pinned-note input:focus { outline: none; }
+
+  .thread-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .bubble { max-width: 68%; padding: 9px 13px; border-radius: 14px; font-size: 13.5px; line-height: 1.45; }
+  .bubble-in { background: var(--surface); border: 1px solid var(--line); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .bubble-out { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .bubble-note {
+    max-width: 100%; align-self: stretch;
+    background: var(--warm-soft); border: 1px dashed var(--warm); color: var(--ink);
+  }
+  .bubble-note-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm); margin-bottom: 4px; }
+  .bubble-time { font-size: 10.5px; margin-top: 4px; opacity: 0.65; }
+
+  .composer { border-top: 1px solid var(--line); padding: 12px 16px 16px; flex-shrink: 0; }
+  .composer-mode { display: flex; gap: 4px; margin-bottom: 10px; }
+  .composer-mode button {
+    background: none; border: 1px solid var(--line); color: var(--ink-muted);
+    border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 600; cursor: pointer;
+  }
+  .composer-mode button.active.mode-public { background: var(--accent-soft); color: var(--accent-strong); border-color: var(--accent-soft-border); }
+  .composer-mode button.active.mode-note { background: var(--warm-soft); color: var(--warm); border-color: var(--warm); }
+  .composer-row { display: flex; gap: 10px; align-items: flex-end; }
+  .composer-row textarea { flex: 1; min-height: 42px; max-height: 120px; }
+
+  /* ---------- Oportunidades ---------- */
+  .kanban-wrap { overflow-x: auto; padding-bottom: 8px; }
+  .kanban { display: flex; gap: 16px; min-width: 900px; }
+  .kanban-column {
+    flex: 1 1 0;
+    min-width: 250px;
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .kanban-column.dragover { border-color: var(--accent); background: var(--accent-soft); }
+  .kanban-col-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .kanban-col-title { font-weight: 700; font-size: 13px; }
+  .kanban-col-sum { font-size: 11.5px; color: var(--ink-faint); }
+  .opp-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px; cursor: grab; display: flex; flex-direction: column; gap: 8px;
+  }
+  .opp-card:active { cursor: grabbing; }
+  .opp-card.dragging { opacity: 0.4; }
+  .opp-name { font-weight: 600; font-size: 13px; }
+  .opp-plan { font-size: 12px; color: var(--ink-muted); }
+  .opp-value { font-size: 13.5px; font-weight: 600; }
+  .opp-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .quick-add-form { display: flex; flex-direction: column; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+  .quick-add-actions { display: flex; gap: 6px; }
+
+  /* ---------- Clientes ---------- */
+  .clientes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .cliente-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .cliente-name { font-weight: 700; font-size: 14px; }
+  .cliente-plan { font-size: 12.5px; color: var(--ink-muted); }
+  .cliente-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 6px 0; border-top: 1px solid var(--line-soft); }
+  .cliente-row-label { color: var(--ink-faint); }
+
+  /* ---------- Pessoas ---------- */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+  table.data-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+  .data-table th {
+    text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink-faint); font-weight: 600; padding: 12px 16px; background: var(--surface-raised);
+    border-bottom: 1px solid var(--line); position: sticky; top: 0;
+  }
+  .data-table td { padding: 12px 16px; border-bottom: 1px solid var(--line-soft); font-size: 13px; vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface-hover); }
+  .person-name-cell { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+
+  /* ---------- Disparos ---------- */
+  .broadcast-row { display: flex; align-items: center; gap: 16px; padding: 16px; }
+  .broadcast-row + .broadcast-row { border-top: 1px solid var(--line); }
+  .broadcast-info { flex: 1; min-width: 0; }
+  .broadcast-name { font-weight: 600; font-size: 13.5px; margin-bottom: 4px; }
+  .broadcast-meta { font-size: 12px; color: var(--ink-faint); display: flex; align-items: center; gap: 6px; }
+  .broadcast-progress-wrap { width: 220px; flex-shrink: 0; }
+  .progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+  .progress > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; width: 0%; }
+  @media (prefers-reduced-motion: no-preference) { .progress > span { transition: width 250ms linear; } }
+  .progress-label { font-size: 11px; color: var(--ink-faint); }
+
+  .audience-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .audience-tabs button {
+    background: var(--surface); border: 1px solid var(--line); color: var(--ink-muted);
+    border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  .audience-tabs button.active { background: var(--accent-soft); color: var(--accent-strong); border-color: var(--accent-soft-border); }
+  .audience-list { max-height: 200px; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; padding: 6px; }
+  .audience-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 8px; font-size: 13px; }
+  .audience-item:hover { background: var(--surface-hover); }
+
+  /* ---------- Fluxos ---------- */
+  .fluxos-layout { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+  .flow-list-item { display: flex; align-items: center; gap: 10px; padding: 14px; cursor: pointer; }
+  .flow-list-item + .flow-list-item { border-top: 1px solid var(--line); }
+  .flow-list-item.selected { background: var(--accent-soft); }
+  .flow-list-item .fli-body { flex: 1; min-width: 0; }
+  .flow-list-item .fli-name { font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+  .flow-list-item .fli-trigger { font-size: 11.5px; color: var(--ink-faint); }
+
+  .flow-chain { display: flex; align-items: stretch; gap: 10px; margin-top: 20px; }
+  .flow-box { flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .flow-box-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; margin-bottom: 8px; }
+  .flow-box-trigger .flow-box-label { color: var(--accent-strong); }
+  .flow-box-cond .flow-box-label { color: var(--warn); }
+  .flow-box-action .flow-box-label { color: var(--good); }
+  .flow-box-text { font-size: 13px; line-height: 1.4; }
+  .flow-arrow { display: flex; align-items: center; color: var(--ink-faint); flex-shrink: 0; }
+
+  /* ---------- Atendente IA ---------- */
+  .var-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+  .var-row .input { flex: 1; }
+  .var-remove {
+    flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; background: var(--bad-soft); color: var(--bad);
+    border: none; cursor: pointer; font-size: 15px; display: grid; place-items: center;
+  }
+  .var-remove:hover { background: var(--bad); color: #fff; }
+
+  .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+  .media-thumb { height: 88px; border-radius: 10px; margin-bottom: 10px; }
+  .media-name { font-size: 12.5px; font-weight: 600; margin-bottom: 2px; }
+  .media-type { font-size: 11px; color: var(--ink-faint); }
+
+  .kb-item { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  .kb-header {
+    padding: 14px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    font-weight: 600; font-size: 13.5px; background: var(--surface);
+  }
+  .kb-chevron { transition: transform 150ms ease; color: var(--ink-faint); flex-shrink: 0; }
+  .kb-item.open .kb-chevron { transform: rotate(180deg); }
+  .kb-body { padding: 0 16px; max-height: 0; overflow: hidden; color: var(--ink-muted); font-size: 13px; line-height: 1.55; }
+  @media (prefers-reduced-motion: no-preference) { .kb-body { transition: max-height 200ms ease, padding 200ms ease; } }
+  .kb-item.open .kb-body { padding: 4px 16px 16px; max-height: 200px; }
+
+  .schedule-row {
+    display: grid; grid-template-columns: 110px 44px 1fr 1fr; gap: 14px; align-items: center;
+    padding: 11px 0; border-bottom: 1px solid var(--line-soft);
+  }
+  .schedule-row:last-child { border-bottom: none; }
+  .schedule-day { font-weight: 600; font-size: 13px; }
+  .schedule-row.disabled .schedule-day { color: var(--ink-faint); }
+  .schedule-row input[type="time"] { width: 100%; }
+
+  /* ---------- Ajustes ---------- */
+  .team-row { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line-soft); }
+  .team-row:last-child { border-bottom: none; }
+  .team-name { font-weight: 600; font-size: 13.5px; }
+  .team-email { font-size: 12px; color: var(--ink-faint); }
+  .invite-form { display: flex; gap: 8px; margin-top: 14px; align-items: flex-start; }
+  .invite-form .input { flex: 1; }
+
+  /* ---------- Contas ---------- */
+  .accounts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .account-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .account-glyph { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
+  .account-glyph.wa { background: rgba(63,203,142,0.16); color: var(--whatsapp); }
+  .account-glyph.ig { background: rgba(232,92,154,0.16); color: var(--instagram); }
+  .account-title { font-weight: 700; font-size: 14.5px; }
+  .account-actions { display: flex; gap: 8px; margin-top: 16px; }
+
+  .qr-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 10px 0 4px; }
+  .qr {
+    width: 168px; height: 168px;
+    display: grid; grid-template-columns: repeat(11, 1fr); grid-template-rows: repeat(11, 1fr);
+    gap: 2px; background: #fff; padding: 10px; border-radius: 10px;
+  }
+  .qr-cell { background: transparent; border-radius: 1px; }
+  .qr-cell.on { background: #0B0B12; }
+  .qr-caption { font-size: 12.5px; color: var(--ink-muted); }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface-raised); border: 1px solid var(--line); color: var(--ink);
+    padding: 13px 18px; border-radius: 12px; font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0; transform: translateY(8px); pointer-events: none; z-index: 999;
+  }
+  @media (prefers-reduced-motion: no-preference) { .toast { transition: opacity 200ms ease, transform 200ms ease; } }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex-shrink: 0; }
+
+  .empty-state { color: var(--ink-faint); font-size: 13px; padding: 24px; text-align: center; }
+</style>
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-glyph">P</div>
+      <div class="brand-name">Plataforma Comercial</div>
+    </div>
+    <nav class="nav" id="nav">
+      <button class="nav-item" data-view="painel">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="6" height="6" rx="1.3"></rect><rect x="11.5" y="2.5" width="6" height="6" rx="1.3"></rect><rect x="2.5" y="11.5" width="6" height="6" rx="1.3"></rect><rect x="11.5" y="11.5" width="6" height="6" rx="1.3"></rect></svg>
+        <span>Painel</span>
+      </button>
+      <button class="nav-item" data-view="conversas">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2H8l-3.5 3v-3H5c-1.1 0-2-.9-2-2v-6z"></path></svg>
+        <span>Conversas</span>
+      </button>
+      <button class="nav-item" data-view="oportunidades">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14l4.5-5 3 3L17 5"></path><path d="M12.5 5H17v4.5"></path></svg>
+        <span>Oportunidades</span>
+      </button>
+      <button class="nav-item" data-view="clientes">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"></circle><path d="M2.5 17c0-3 2.5-5 5.5-5s5.5 2 5.5 5"></path><path d="M14.3 10.2l1.3 1.3 2.4-2.6"></path></svg>
+        <span>Clientes</span>
+      </button>
+      <button class="nav-item" data-view="pessoas">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="6.5" r="2.7"></circle><circle cx="14" cy="7.5" r="2.2"></circle><path d="M2 17c0-2.8 2.2-4.8 5-4.8s5 2 5 4.8"></path><path d="M12.5 12.5c2.3.2 3.8 2 3.8 4.5"></path></svg>
+        <span>Pessoas</span>
+      </button>
+      <button class="nav-item" data-view="disparos">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 2.5L2.5 9l5.8 2.2L10.5 17l7-14.5z"></path><path d="M8.3 11.2l4-4.2"></path></svg>
+        <span>Disparos</span>
+      </button>
+      <button class="nav-item" data-view="fluxos">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.5" cy="4" r="1.8"></circle><circle cx="16.5" cy="4" r="1.8"></circle><circle cx="10" cy="16" r="1.8"></circle><path d="M5.2 4.6L14.8 4.6M4.6 5.6L9.2 14.6M15.4 5.6L10.8 14.6"></path></svg>
+        <span>Fluxos</span>
+      </button>
+      <button class="nav-item" data-view="ia">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5l1.4 4.1 4.1 1.4-4.1 1.4L10 13.5l-1.4-4.1-4.1-1.4 4.1-1.4L10 2.5z"></path><path d="M16 13l.6 1.8 1.8.6-1.8.6-.6 1.8-.6-1.8-1.8-.6 1.8-.6.6-1.8z"></path></svg>
+        <span>Atendente IA</span>
+      </button>
+      <button class="nav-item" data-view="ajustes">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.6"></circle><path d="M10 3v2M10 15v2M17 10h-2M5 10H3M14.8 5.2l-1.4 1.4M6.6 13.4l-1.4 1.4M14.8 14.8l-1.4-1.4M6.6 6.6L5.2 5.2"></path></svg>
+        <span>Ajustes</span>
+      </button>
+      <button class="nav-item" data-view="contas">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V4.5M13 8V4.5M5 8h10l-.6 4.2a3 3 0 01-3 2.6H8.6a3 3 0 01-3-2.6L5 8z"></path><path d="M10 14.8V17"></path></svg>
+        <span>Contas</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="avatar">AB</div>
+      <div class="sidebar-footer-text">
+        <div class="sidebar-footer-name">Ana Beatriz Menezes</div>
+        <a class="sidebar-footer-link" href="#" onclick="return false;">Sair</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+
+    <section class="view" id="view-painel" hidden>
+      <div class="eyebrow">Seção</div>
+      <h1>Painel</h1>
+      <div class="stats-row">
+        <div class="card stat-tile">
+          <div class="stat-label">Previsão ponderada</div>
+          <div class="stat-value mono" id="stat-previsao">—</div>
+        </div>
+        <div class="card stat-tile">
+          <div class="stat-label">Oportunidades abertas</div>
+          <div class="stat-value mono" id="stat-abertas">—</div>
+        </div>
+        <div class="card stat-tile">
+          <div class="stat-label">Valor em aberto</div>
+          <div class="stat-value mono" id="stat-valor-aberto">—</div>
+        </div>
+        <div class="card stat-tile">
+          <div class="stat-label">Conversas hoje</div>
+          <div class="stat-value mono" id="stat-conversas-hoje">—</div>
+        </div>
+      </div>
+      <div class="painel-grid">
+        <div class="card">
+          <div class="card-title">Novas conversas — últimos 7 dias</div>
+          <div class="chart-canvas-wrap">
+            <canvas id="chart-conversas" height="220"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Conversas recentes</div>
+          <div class="recent-list" id="recent-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-conversas" hidden>
+      <div class="eyebrow">Seção</div>
+      <h1>Conversas</h1>
+      <div class="conversas-layout">
+        <div class="conv-list-pane">
+          <div class="conv-list-head">
+            <div class="conv-list-count">52 conversas</div>
+            <div class="pill-toggle" id="conv-channel-filter">
+              <button data-channel="todas" class="active">Todas</button>
+              <button data-channel="whatsapp">WhatsApp</button>
+              <button data-channel="instagram">Instagram</button>
+            </div>
+            <input class="input" id="conv-search" type="text" placeholder="Buscar por nome...">
+          </div>
+          <div class="conv-list-body" id="conv-list-body"></div>
+        </div>
+        <div class="conv-thread-pane" id="conv-thread-pane"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-oportunidades" hidden>
+      <div class="eyebrow">Seção</div>
+      <div class="view-head">
+        <h1 style="margin-bottom:6px;">Oportunidades</h1>
+        <div class="view-sub" id="opp-summary"></div>
+      </div>
+      <div class="kanban-wrap">
+        <div class="kanban" id="kanban"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-clientes" hidden>
+      <div class="eyebrow">Seção</div>
+      <div class="view-head">
+        <h1 style="margin-bottom:14px;">Clientes</h1>
+        <input class="input" id="clientes-search" type="text" placeholder="Buscar cliente por nome..." style="max-width:320px;">
+      </div>
+      <div class="clientes-grid" id="clientes-grid"></div>
+    </section>
+
+    <section class="view" id="view-pessoas" hidden>
+      <div class="eyebrow">Seção</div>
+      <div class="view-head">
+        <h1 style="margin-bottom:14px;">Pessoas</h1>
+        <div class="field-row" style="max-width:560px;">
+          <input class="input" id="pessoas-search" type="text" placeholder="Buscar por nome...">
+          <select class="input" id="pessoas-origem-filter" style="max-width:200px;">
+            <option value="todas">Todas as origens</option>
+            <option value="indicacao">Indicação</option>
+            <option value="organico">Orgânico</option>
+            <option value="meta_ads">Meta Ads</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Telefone / Instagram</th>
+              <th>Origem</th>
+              <th>Estágio / Status</th>
+              <th>Atendente</th>
+            </tr>
+          </thead>
+          <tbody id="pessoas-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="view" id="view-disparos" hidden>
+      <div class="eyebrow">Seção</div>
+      <div class="view-head" style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px;">
+        <div>
+          <h1 style="margin-bottom:6px;">Disparos</h1>
+          <div class="view-sub">Campanhas de mensagens em massa por WhatsApp e Instagram.</div>
+        </div>
+        <button class="btn btn-primary" id="btn-new-broadcast">+ Novo disparo</button>
+      </div>
+
+      <div class="card" id="new-broadcast-form" style="margin-bottom:20px; display:none;">
+        <div class="card-title">Novo disparo</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Nome do disparo</label>
+            <input class="input" id="bc-name" type="text" placeholder="Ex: Convite Imersão Presencial — Outubro">
+          </div>
+          <div class="field">
+            <label>Conta de envio</label>
+            <select class="input" id="bc-channel">
+              <option value="whatsapp">WhatsApp — Voar Mentoria</option>
+              <option value="instagram">Instagram — @voarmentoria</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Mensagem</label>
+          <textarea class="input" id="bc-message" placeholder="Escreva a mensagem do disparo...">Oi {nome}! Abrimos novas vagas para a próxima turma da Voar Mentoria. Quer que eu te conte mais? 😊</textarea>
+          <div class="field-hint">Use {nome} para personalizar a mensagem com o nome de cada pessoa.</div>
+        </div>
+        <div class="field">
+          <label>Público</label>
+          <div class="audience-tabs" id="bc-audience-tabs">
+            <button data-tab="lista" class="active">Selecionar da lista</button>
+            <button data-tab="manual">Colar lista manual</button>
+          </div>
+          <div id="bc-audience-lista" class="audience-list"></div>
+          <textarea class="input" id="bc-audience-manual" style="display:none;" placeholder="Cole números ou @usuários, um por linha..."></textarea>
+        </div>
+        <div class="field">
+          <label>Envio</label>
+          <div class="pill-toggle" id="bc-schedule-toggle" style="max-width:280px;">
+            <button data-mode="agora" class="active">Enviar agora</button>
+            <button data-mode="agendado">Agendar</button>
+          </div>
+          <input class="input" id="bc-schedule-datetime" type="datetime-local" style="display:none; margin-top:10px; max-width:280px;">
+        </div>
+        <div style="display:flex; gap:10px; margin-top:6px;">
+          <button class="btn btn-primary" id="btn-submit-broadcast">Enviar disparo</button>
+          <button class="btn btn-ghost" id="btn-cancel-broadcast">Cancelar</button>
+        </div>
+      </div>
+
+      <div class="card" style="padding:0;">
+        <div id="broadcast-list"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-fluxos" hidden>
+      <div class="eyebrow">Seção</div>
+      <h1>Fluxos</h1>
+      <div class="fluxos-layout">
+        <div class="card" style="padding:0;" id="flow-list"></div>
+        <div class="card" id="flow-detail"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-ia" hidden>
+      <div class="eyebrow">Seção</div>
+      <h1>Atendente IA</h1>
+      <div class="tabs" id="ia-tabs">
+        <button class="tab-btn active" data-tab="agente">Agente</button>
+        <button class="tab-btn" data-tab="midias">Mídias</button>
+        <button class="tab-btn" data-tab="base">Base de Conhecimento</button>
+        <button class="tab-btn" data-tab="horario">Horário de atendimento</button>
+      </div>
+      <div id="ia-tab-content"></div>
+    </section>
+
+    <section class="view" id="view-ajustes" hidden>
+      <div class="eyebrow">Seção</div>
+      <h1>Ajustes</h1>
+      <div class="tabs" id="ajustes-tabs">
+        <button class="tab-btn active" data-tab="perfil">Perfil do negócio</button>
+        <button class="tab-btn" data-tab="equipe">Equipe</button>
+      </div>
+      <div id="ajustes-tab-content"></div>
+    </section>
+
+    <section class="view" id="view-contas" hidden>
+      <div class="eyebrow">Seção</div>
+      <h1>Contas</h1>
+      <div class="accounts-grid" id="accounts-grid"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"><span class="toast-dot"></span><span id="toast-text"></span></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================= DATA ============================= */
+
+  var DB = {
+    business: {
+      nome_da_empresa: 'Voar Mentoria',
+      segmento: 'Mentoria para nutricionistas e terapeutas que querem estruturar e escalar o atendimento particular',
+      nome_do_agente: 'Sofia',
+      produto_principal: 'Mentoria Individual',
+      publico_alvo: 'Nutricionistas e terapeutas autônomos que querem estruturar o atendimento particular',
+      resultado_entregue: 'Agenda cheia com atendimento particular estruturado e precificado corretamente'
+    },
+
+    team: [
+      { id: 't1', nome: 'Ana Beatriz Menezes', papel: 'Owner' },
+      { id: 't2', nome: 'Rafael Lima', papel: 'Vendas' },
+      { id: 't3', nome: 'Marina Costa', papel: 'Atendimento' }
+    ],
+
+    people: [
+      { id: 'p1', nome: 'Camila Duarte', channel: 'whatsapp', contato: '+55 11 98211-4432', estagio: 'em_conversa', temperatura: 'morno', origem: 'indicacao', atendente: 'Rafael Lima', isClient: false, plano: 'Mentoria Individual', valor: 4800, recencia: 190, aiPaused: true,
+        pinnedNote: 'Mandar o PDF do programa completo e retomar contato em 2 dias.',
+        mensagens: [
+          { from: 'in', hora: '09:02', texto: 'Oi! Vi o post da Julia (minha amiga) marcando vocês, queria entender melhor como funciona a mentoria 😊' },
+          { from: 'out', hora: '09:10', texto: 'Oi, Camila! Que bom que a Julia te indicou 💜 Você já atende hoje ou está começando o consultório?' },
+          { from: 'in', hora: '09:14', texto: 'Atendo há uns 2 anos, mas sinto que não sei precificar nem organizar agenda direito' },
+          { from: 'out', hora: '09:17', texto: 'Faz muito sentido, é exatamente o que a gente ajusta na Mentoria Individual. É 100% no seu ritmo, com encontros quinzenais' },
+          { from: 'in', hora: '09:19', texto: 'Entendi! E qual o valor?' },
+          { from: 'out', hora: '09:22', texto: 'O investimento é R$ 4.800, parcelado em até 12x. Posso te mandar o programa completo em PDF?' },
+          { from: 'in', hora: '09:23', texto: 'Pode sim, manda por favor' },
+          { from: 'note', hora: '09:24', texto: 'Cliente indicada pela Julia (aluna atual). Perfil bem alinhado, priorizar follow-up.' }
+        ] },
+      { id: 'p2', nome: 'Rafael Nogueira', channel: 'instagram', contato: '@rafanogueira.fit', estagio: 'recebeu_proposta', temperatura: 'quente', origem: 'meta_ads', atendente: 'Marina Costa', isClient: false, plano: 'Imersão Presencial', valor: 12400, recencia: 480, aiPaused: false,
+        pinnedNote: 'Aguardando decisão pós-proposta — follow-up até sexta.',
+        mensagens: [
+          { from: 'in', hora: '14:01', texto: 'Boa tarde! Vi o anúncio de vocês no Instagram, queria saber mais' },
+          { from: 'out', hora: '14:06', texto: 'Oi, Rafael! Tudo bem? Conta pra gente, você já atua como personal ou terapeuta?' },
+          { from: 'in', hora: '14:09', texto: 'Sou personal trainer, quero migrar pro digital e não sei por onde começar' },
+          { from: 'out', hora: '14:12', texto: 'Perfeito, a Imersão Presencial é ideal pra isso, dura 2 dias e você sai com o método completo de vendas' },
+          { from: 'in', hora: '14:15', texto: 'Fiquei bem interessado! Qual o investimento?' },
+          { from: 'out', hora: '14:20', texto: 'R$ 12.400, com condição especial até sexta saindo por R$ 10.900. Te mandei a proposta completa por aqui' },
+          { from: 'in', hora: '14:35', texto: 'Recebi, vou analisar com calma e te retorno' },
+          { from: 'out', hora: '14:36', texto: 'Combinado! Fico à disposição, qualquer coisa é só chamar 🙌' }
+        ] },
+      { id: 'p3', nome: 'Beatriz Salles', channel: 'whatsapp', contato: '+55 21 99044-7781', estagio: 'fechado', temperatura: 'quente', origem: 'indicacao', atendente: 'Marina Costa', isClient: true, plano: 'Mentoria Individual', valor: 4800, clienteDesde: '2026-03-14', recencia: 2000, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '18:02', texto: 'Marina, obrigada de novo pela sessão de ontem, foi incrível!' },
+          { from: 'out', hora: '18:05', texto: 'Que alegria, Bia! Você está evoluindo muito rápido 💜' },
+          { from: 'in', hora: '18:07', texto: 'Já consegui reorganizar minha agenda e cobrar o novo valor com 3 pacientes' },
+          { from: 'out', hora: '18:09', texto: 'Isso! Guarda esse print pra gente usar de depoimento, com sua autorização' },
+          { from: 'in', hora: '18:10', texto: 'Pode usar sim! Nos vemos na próxima mentoria' },
+          { from: 'out', hora: '18:11', texto: 'Combinado, até quinta às 19h 🙂' }
+        ] },
+      { id: 'p4', nome: 'João Vitor Prado', channel: 'whatsapp', contato: '+55 31 98877-2210', estagio: 'chegou_agora', temperatura: 'frio', origem: 'organico', atendente: null, isClient: false, plano: 'Mentoria Individual', valor: 4800, recencia: 5, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '20:41', texto: 'Oi, boa noite. Encontrei vocês pesquisando sobre mentoria pra nutricionista' },
+          { from: 'out', hora: '20:42', texto: 'Oi, João! Que bom te ver por aqui 😊 Me conta, você já atende particular ou está começando agora?' },
+          { from: 'in', hora: '20:44', texto: 'Ainda estou começando, formei ano passado' }
+        ] },
+      { id: 'p5', nome: 'Larissa Fontes', channel: 'instagram', contato: '@larissafontes.terapias', estagio: 'em_conversa', temperatura: 'quente', origem: 'indicacao', atendente: 'Rafael Lima', isClient: false, plano: 'Mentoria Individual', valor: 4800, recencia: 1300, aiPaused: true,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '10:12', texto: 'Rafael, vi que a Camila fechou com vocês, quero entender melhor tb' },
+          { from: 'out', hora: '10:18', texto: 'Oi, Larissa! Fico feliz que ela comentou 💜 Você atua com o quê hoje?' },
+          { from: 'in', hora: '10:20', texto: 'Terapias integrativas, mas mal tenho agenda organizada' },
+          { from: 'out', hora: '10:23', texto: 'Show, é exatamente o público da mentoria. Você prefere atendimento individual ou em grupo?' },
+          { from: 'in', hora: '10:26', texto: 'Acho que individual faz mais sentido pro meu momento' },
+          { from: 'out', hora: '10:30', texto: 'Perfeito, vou te chamar numa call rápida essa semana pra alinhar os detalhes, pode ser?' },
+          { from: 'in', hora: '10:33', texto: 'Pode sim! Quinta de manhã fico livre' },
+          { from: 'out', hora: '10:35', texto: 'Fechado, te confirmo o horário até amanhã 🙌' }
+        ] },
+      { id: 'p6', nome: 'Henrique Sá', channel: 'whatsapp', contato: '+55 41 99123-5567', estagio: 'fechado', temperatura: 'quente', origem: 'organico', atendente: 'Marina Costa', isClient: true, plano: 'Imersão Presencial', valor: 12400, clienteDesde: '2026-05-02', recencia: 2600, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '11:00', texto: 'Marina, já garanti o hotel pra imersão de setembro!' },
+          { from: 'out', hora: '11:04', texto: 'Que ótimo, Henrique! Vai ser incrível, já separei seu material de boas-vindas' },
+          { from: 'in', hora: '11:06', texto: 'Show, mal posso esperar. Consigo levar minha sócia também?' },
+          { from: 'out', hora: '11:09', texto: 'Consegue sim, ela entra como convidada com desconto de parceiro. Te mando o link' }
+        ] },
+      { id: 'p7', nome: 'Patrícia Weber', channel: 'whatsapp', contato: '+55 51 98456-9012', estagio: 'recebeu_proposta', temperatura: 'morno', origem: 'meta_ads', atendente: 'Marina Costa', isClient: false, plano: 'Mentoria Individual', valor: 4800, recencia: 65, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '16:20', texto: 'Oi, recebi a proposta mas ainda estou insegura sobre o investimento' },
+          { from: 'out', hora: '16:24', texto: 'Entendo, Patrícia! Consigo parcelar em até 12x, ficaria em torno de R$ 400 por mês. Isso ajuda?' },
+          { from: 'in', hora: '16:27', texto: 'Ajuda bastante, deixa eu ver aqui com meu marido' },
+          { from: 'out', hora: '16:29', texto: 'Sem pressa! Se quiser, te mando um caso de outra aluna que estava na mesma dúvida' },
+          { from: 'in', hora: '16:31', texto: 'Manda sim, por favor' }
+        ] },
+      { id: 'p8', nome: 'Diego Amaral', channel: 'instagram', contato: '@diego.amaral.psi', estagio: 'chegou_agora', temperatura: 'frio', origem: 'organico', atendente: null, isClient: false, plano: 'Curso Voar Digital', valor: 1200, recencia: 22, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '19:58', texto: 'Oi, vi o story de vocês sobre precificação, muito bom!' },
+          { from: 'out', hora: '19:59', texto: 'Oi, Diego! Que bom que curtiu 😊 Você atende como psicólogo particular hoje?' },
+          { from: 'in', hora: '20:02', texto: 'Sim, mas só tenho 4 pacientes fixos' }
+        ] },
+      { id: 'p9', nome: 'Fernanda Reis', channel: 'whatsapp', contato: '+55 11 97744-3321', estagio: 'fechado', temperatura: 'quente', origem: 'organico', atendente: 'Rafael Lima', isClient: true, plano: 'Curso Voar Digital', valor: 1200, clienteDesde: '2026-06-20', recencia: 4000, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '13:10', texto: 'Terminei o módulo 3 do curso hoje!' },
+          { from: 'out', hora: '13:12', texto: 'Arrasou, Fernanda! Como está sendo aplicar o conteúdo?' },
+          { from: 'in', hora: '13:15', texto: 'Já ajustei minha bio e o script de resposta, tive 2 agendamentos essa semana' },
+          { from: 'out', hora: '13:16', texto: 'Isso é exatamente o resultado que a gente busca 🙌 Continua assim!' }
+        ] },
+      { id: 'p10', nome: 'Marcos Vinícius Costa', channel: 'whatsapp', contato: '+55 19 98211-0098', estagio: 'em_conversa', temperatura: 'quente', origem: 'indicacao', atendente: 'Rafael Lima', isClient: false, plano: 'Mentoria Individual', valor: 4800, recencia: 340, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '08:30', texto: 'Rafael, bom dia! Minha esposa (Camila) comentou super bem de vocês' },
+          { from: 'out', hora: '08:35', texto: 'Bom dia, Marcos! Que bom, ela está super animada com a mentoria 💜 Você atua na área também?' },
+          { from: 'in', hora: '08:38', texto: 'Sim, sou nutricionista esportivo, quero estruturar melhor meu atendimento particular' },
+          { from: 'out', hora: '08:40', texto: 'Perfeito, tenho certeza que vai fazer muito sentido pra você. Posso te mandar o programa?' },
+          { from: 'in', hora: '08:41', texto: 'Pode sim, manda por favor' }
+        ] },
+      { id: 'p11', nome: 'Juliana Prado', channel: 'instagram', contato: '@ju.prado.nutri', estagio: 'recebeu_proposta', temperatura: 'morno', origem: 'meta_ads', atendente: null, isClient: false, plano: 'Curso Voar Digital', valor: 1200, recencia: 600, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '12:00', texto: 'Recebi a proposta do curso, mas queria entender se serve pra quem tá começando' },
+          { from: 'out', hora: '12:05', texto: 'Serve sim! O Curso Voar Digital foi pensado justo pra quem tá estruturando o atendimento particular do zero' },
+          { from: 'in', hora: '12:08', texto: 'Que bom, vou fechar ainda essa semana' }
+        ] },
+      { id: 'p12', nome: 'Thiago Meireles', channel: 'whatsapp', contato: '+55 27 99567-1234', estagio: 'fechado', temperatura: 'quente', origem: 'indicacao', atendente: 'Marina Costa', isClient: true, plano: 'Mentoria Individual', valor: 4800, clienteDesde: '2026-02-08', recencia: 5000, aiPaused: false,
+        pinnedNote: '', mensagens: [
+          { from: 'in', hora: '17:40', texto: 'Oi Marina, consegui fechar minha primeira semana só com particulares!' },
+          { from: 'out', hora: '17:44', texto: 'Que orgulho, Thiago! Isso é resultado direto do trabalho de vocês na mentoria' },
+          { from: 'in', hora: '17:46', texto: 'Com certeza, muito obrigado pelo suporte de sempre' }
+        ] }
+    ],
+
+    broadcasts: [
+      { id: 'b1', nome: 'Follow-up leads Meta Ads — agosto', canal: 'whatsapp', status: 'concluido', enviados: 120, total: 120 },
+      { id: 'b2', nome: 'Convite Imersão Presencial — Setembro', canal: 'whatsapp', status: 'enviando', enviados: 84, total: 120 },
+      { id: 'b3', nome: 'Reengajamento Instagram — carrinho', canal: 'instagram', status: 'concluido', enviados: 46, total: 46 }
+    ],
+
+    flows: [
+      { id: 'f1', nome: 'Boas-vindas ao primeiro contato', trigger: 'Mensagem recebida', ativo: true,
+        chain: { trigger: 'Mensagem recebida de um novo contato', cond: 'É a primeira interação do lead', action: 'Enviar mensagem de boas-vindas com a apresentação da Sofia' } },
+      { id: 'f2', nome: 'Alerta de lead quente sem resposta', trigger: 'Sem resposta', ativo: true,
+        chain: { trigger: 'Lead classificado como quente', cond: 'Sem resposta da equipe há 2 horas', action: 'Notificar Rafael Lima no WhatsApp interno' } },
+      { id: 'f3', nome: 'Pausar IA quando operador assume', trigger: 'Operador responde', ativo: true,
+        chain: { trigger: 'Atendente humano envia uma mensagem', cond: 'A conversa está com a IA ativa', action: 'Pausar a IA automaticamente nesta conversa' } },
+      { id: 'f4', nome: 'Reativar lead frio após 7 dias', trigger: 'Tempo sem interação', ativo: false,
+        chain: { trigger: 'Lead sem mensagens há 7 dias', cond: 'Estágio ainda é "Chegou agora" ou "Em conversa"', action: 'Enviar mensagem: "Oi! Ainda podemos te ajudar a organizar sua agenda 😊"' } }
+    ],
+
+    aiAgent: {
+      prompt: '## 1. Identidade e objetivo\nVocê é {nome_do_agente}, a assistente virtual de atendimento da {nome_da_empresa}. Seu objetivo é acolher quem entra em contato, entender o momento profissional da pessoa e conduzir a conversa até o agendamento de uma conversa com o time comercial.\n\n## 2. Sobre a {nome_da_empresa}\nA {nome_da_empresa} é uma mentoria voltada para profissionais de {segmento}. Trabalhamos com métodos práticos de precificação, agenda e posicionamento para quem já atende ou quer começar a atender particular.\n\n## 3. Tom de voz\nFale de forma próxima, acolhedora e direta. Use linguagem simples, sem jargões de marketing. Emojis com moderação.\n\n## 4. Regras de conduta\n- Nunca prometa resultados financeiros específicos.\n- Se o lead pedir para falar com um humano, avise que vai chamar um atendente e pause a automação.\n- Sempre pergunte se a pessoa já atende particular ou está começando agora.\n\n## 5. Fluxo de qualificação\n1. Entender se a pessoa já atende ou está começando.\n2. Entender a maior dificuldade hoje (agenda, precificação ou captação).\n3. Apresentar o produto mais adequado ao momento dela.\n4. Convidar para uma conversa com o time comercial.',
+      variaveis: [
+        { chave: 'nome_do_agente', valor: 'Sofia' },
+        { chave: 'nome_da_empresa', valor: 'Voar Mentoria' },
+        { chave: 'segmento', valor: 'mentoria para nutricionistas e terapeutas' },
+        { chave: 'produto_principal', valor: 'Mentoria Individual' },
+        { chave: 'resultado_entregue', valor: 'agenda cheia com atendimento particular estruturado' }
+      ]
+    },
+
+    media: [
+      { nome: 'Tabela de preços.pdf', tipo: 'PDF', cor: 'linear-gradient(135deg, var(--accent), var(--accent-strong))' },
+      { nome: 'Vídeo de apresentação.mp4', tipo: 'Vídeo', cor: 'linear-gradient(135deg, var(--warm), #ffb088)' },
+      { nome: 'Depoimentos em vídeo.mp4', tipo: 'Vídeo', cor: 'linear-gradient(135deg, var(--good), #6fe0ae)' },
+      { nome: 'Apresentação da mentoria.pdf', tipo: 'PDF', cor: 'linear-gradient(135deg, var(--cold), #9cc7e8)' }
+    ],
+
+    knowledge: [
+      { titulo: 'Como funciona a mentoria', texto: 'A mentoria individual acontece em encontros quinzenais ao vivo, com acompanhamento entre as sessões via WhatsApp. O foco é sair de cada encontro com um próximo passo prático.' },
+      { titulo: 'Política de reembolso', texto: 'Garantia incondicional de 7 dias após a matrícula. Após esse prazo não realizamos reembolso, mas oferecemos remanejamento de turma em casos excepcionais.' },
+      { titulo: 'Depoimentos de alunas', texto: 'Mais de 140 profissionais já passaram pela Voar Mentoria. Em média, as alunas relatam aumento de 35% no valor da consulta particular em até 90 dias.' },
+      { titulo: 'Formas de pagamento', texto: 'Aceitamos cartão de crédito em até 12x, PIX com 5% de desconto à vista e boleto em até 3x.' }
+    ],
+
+    schedule: [
+      { dia: 'Domingo', ativo: false, inicio: '09:00', fim: '18:00' },
+      { dia: 'Segunda-feira', ativo: true, inicio: '09:00', fim: '18:00' },
+      { dia: 'Terça-feira', ativo: true, inicio: '09:00', fim: '18:00' },
+      { dia: 'Quarta-feira', ativo: true, inicio: '09:00', fim: '18:00' },
+      { dia: 'Quinta-feira', ativo: true, inicio: '09:00', fim: '18:00' },
+      { dia: 'Sexta-feira', ativo: true, inicio: '09:00', fim: '18:00' },
+      { dia: 'Sábado', ativo: false, inicio: '09:00', fim: '18:00' }
+    ],
+
+    channels: {
+      whatsapp: { conectado: true, numero: '+55 11 91234-5678' },
+      instagram: { conectado: false, handle: '@voarmentoria' }
+    },
+
+    chartData: [8, 12, 7, 15, 10, 18, 14],
+    chartLabels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
+  };
+
+  var nextPersonSeq = 13;
+
+  /* ============================= HELPERS ============================= */
+
+  function qs(sel, root) { return (root || document).querySelector(sel); }
+  function qsa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+  function esc(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function formatBRL(value) {
+    var n = Number(value) || 0;
+    return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function initials(name) {
+    var parts = String(name).trim().split(/\s+/);
+    var first = parts[0] ? parts[0][0] : '';
+    var last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+    return (first + last).toUpperCase();
+  }
+
+  function formatRelative(minutes) {
+    if (minutes < 60) return 'há ' + minutes + ' min';
+    if (minutes < 1440) return 'há ' + Math.round(minutes / 60) + ' h';
+    if (minutes < 2880) return 'ontem';
+    return 'há ' + Math.round(minutes / 1440) + ' d';
+  }
+
+  function personById(id) {
+    for (var i = 0; i < DB.people.length; i++) if (DB.people[i].id === id) return DB.people[i];
+    return null;
+  }
+
+  var STAGE_LABELS = {
+    chegou_agora: 'Chegou agora',
+    em_conversa: 'Em conversa',
+    recebeu_proposta: 'Recebeu proposta',
+    fechado: 'Fechado'
+  };
+  var STAGE_ORDER = ['chegou_agora', 'em_conversa', 'recebeu_proposta', 'fechado'];
+  var STAGE_WEIGHT = { chegou_agora: 0.10, em_conversa: 0.35, recebeu_proposta: 0.65, fechado: 1 };
+
+  var ORIGEM_LABELS = { indicacao: 'Indicação', organico: 'Orgânico', meta_ads: 'Meta Ads' };
+
+  function tempBadge(temp) {
+    if (temp === 'quente') return '<span class="badge badge-bad">Quente</span>';
+    if (temp === 'morno') return '<span class="badge badge-warn">Morno</span>';
+    return '<span class="badge badge-cold">Frio</span>';
+  }
+  function origemBadge(origem) {
+    return '<span class="badge badge-neutral">' + esc(ORIGEM_LABELS[origem] || origem) + '</span>';
+  }
+  function channelDot(channel) {
+    return '<span class="dot ' + (channel === 'whatsapp' ? 'dot-wa' : 'dot-ig') + '"></span>';
+  }
+
+  var toastTimer = null;
+  function showToast(message) {
+    var toast = qs('#toast');
+    qs('#toast-text').textContent = message;
+    toast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3600);
+  }
+
+  /* ============================= VIEW SWITCH ============================= */
+
+  var RENDERERS = {
+    painel: renderPainel,
+    conversas: renderConversas,
+    oportunidades: renderOportunidades,
+    clientes: renderClientes,
+    pessoas: renderPessoas,
+    disparos: renderDisparos,
+    fluxos: renderFluxos,
+    ia: renderAtendenteIA,
+    ajustes: renderAjustes,
+    contas: renderContas
+  };
+
+  function go(viewId) {
+    qsa('.view').forEach(function (v) { v.hidden = true; v.classList.remove('anim'); });
+    var target = qs('#view-' + viewId);
+    target.hidden = false;
+    void target.offsetWidth;
+    target.classList.add('anim');
+    qsa('.nav-item').forEach(function (n) { n.classList.toggle('active', n.dataset.view === viewId); });
+    if (RENDERERS[viewId]) RENDERERS[viewId]();
+  }
+
+  qsa('.nav-item').forEach(function (item) {
+    item.addEventListener('click', function () { go(item.dataset.view); });
+  });
+
+  /* ============================= PAINEL ============================= */
+
+  function renderPainel() {
+    var open = DB.people.filter(function (p) { return p.estagio !== 'fechado'; });
+    var previsao = open.reduce(function (sum, p) { return sum + p.valor * STAGE_WEIGHT[p.estagio]; }, 0);
+    var valorAberto = open.reduce(function (sum, p) { return sum + p.valor; }, 0);
+
+    qs('#stat-previsao').textContent = formatBRL(previsao);
+    qs('#stat-abertas').textContent = String(open.length);
+    qs('#stat-valor-aberto').textContent = formatBRL(valorAberto);
+    qs('#stat-conversas-hoje').textContent = '18';
+
+    drawBarChart(qs('#chart-conversas'), DB.chartData, DB.chartLabels);
+
+    var recentList = qs('#recent-list');
+    var sorted = DB.people.slice().sort(function (a, b) { return a.recencia - b.recencia; }).slice(0, 5);
+    recentList.innerHTML = sorted.map(function (p) {
+      var lastMsg = p.mensagens[p.mensagens.length - 1];
+      return '<button class="recent-row" data-person="' + p.id + '">' +
+        '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
+        '<div class="rr-text">' +
+          '<div class="rr-name">' + channelDot(p.channel) + esc(p.nome) + '</div>' +
+          '<div class="rr-msg">' + esc(lastMsg.texto) + '</div>' +
+        '</div>' +
+        '<div class="rr-time mono">' + esc(formatRelative(p.recencia)) + '</div>' +
+      '</button>';
+    }).join('');
+
+    qsa('.recent-row', recentList).forEach(function (row) {
+      row.addEventListener('click', function () {
+        pendingSelectedPerson = row.dataset.person;
+        go('conversas');
+      });
+    });
+  }
+
+  function drawBarChart(canvas, data, labels) {
+    if (!canvas) return;
+    var dpr = window.devicePixelRatio || 1;
+    var cssWidth = canvas.parentElement.clientWidth;
+    var cssHeight = 220;
+    canvas.width = cssWidth * dpr;
+    canvas.height = cssHeight * dpr;
+    canvas.style.width = cssWidth + 'px';
+    canvas.style.height = cssHeight + 'px';
+    var ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+    var padLeft = 8, padRight = 8, padTop = 10, padBottom = 26;
+    var chartW = cssWidth - padLeft - padRight;
+    var chartH = cssHeight - padTop - padBottom;
+    var max = Math.max.apply(null, data) * 1.2;
+    var n = data.length;
+    var gap = 14;
+    var barW = (chartW - gap * (n - 1)) / n;
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (var g = 0; g <= 3; g++) {
+      var gy = padTop + (chartH / 3) * g;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, gy);
+      ctx.lineTo(padLeft + chartW, gy);
+      ctx.stroke();
+    }
+
+    for (var i = 0; i < n; i++) {
+      var x = padLeft + i * (barW + gap);
+      var h = (data[i] / max) * chartH;
+      var y = padTop + chartH - h;
+      var grad = ctx.createLinearGradient(0, y, 0, padTop + chartH);
+      grad.addColorStop(0, '#9179FF');
+      grad.addColorStop(1, '#7C5CFA');
+      ctx.fillStyle = grad;
+      var r = Math.min(6, barW / 2);
+      roundRectPath(ctx, x, y, barW, h, r);
+      ctx.fill();
+
+      ctx.fillStyle = '#F4F2F9';
+      ctx.font = '600 11px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(data[i]), x + barW / 2, y - 6);
+
+      ctx.fillStyle = '#6A6480';
+      ctx.font = '500 11px Inter, sans-serif';
+      ctx.fillText(labels[i], x + barW / 2, cssHeight - 8);
+    }
+  }
+
+  function roundRectPath(ctx, x, y, w, h, r) {
+    if (h < r) r = h;
+    ctx.beginPath();
+    ctx.moveTo(x, y + h);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h);
+    ctx.closePath();
+  }
+
+  window.addEventListener('resize', function () {
+    var view = qs('#view-painel');
+    if (view && !view.hidden) drawBarChart(qs('#chart-conversas'), DB.chartData, DB.chartLabels);
+  });
+
+  /* ============================= CONVERSAS ============================= */
+
+  var pendingSelectedPerson = 'p1';
+  var selectedPersonId = null;
+  var convChannelFilter = 'todas';
+  var convSearchTerm = '';
+  var composerMode = 'public';
+
+  function renderConversas() {
+    if (pendingSelectedPerson) { selectedPersonId = pendingSelectedPerson; pendingSelectedPerson = null; }
+    if (!selectedPersonId) selectedPersonId = 'p1';
+    renderConvList();
+    renderConvThread(selectedPersonId);
+  }
+
+  function renderConvList() {
+    var body = qs('#conv-list-body');
+    var list = DB.people.filter(function (p) {
+      if (convChannelFilter !== 'todas' && p.channel !== convChannelFilter) return false;
+      if (convSearchTerm && p.nome.toLowerCase().indexOf(convSearchTerm.toLowerCase()) === -1) return false;
+      return true;
+    }).sort(function (a, b) { return a.recencia - b.recencia; });
+
+    if (!list.length) {
+      body.innerHTML = '<div class="empty-state">Nenhuma conversa encontrada.</div>';
+      return;
+    }
+
+    body.innerHTML = list.map(function (p) {
+      var lastMsg = p.mensagens[p.mensagens.length - 1];
+      return '<button class="conv-row' + (p.id === selectedPersonId ? ' selected' : '') + '" data-person="' + p.id + '">' +
+        '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
+        '<div class="cr-body">' +
+          '<div class="cr-top"><span class="cr-name">' + esc(p.nome) + '</span><span class="cr-time mono">' + esc(formatRelative(p.recencia)) + '</span></div>' +
+          '<div class="cr-msg">' + esc(lastMsg.texto) + '</div>' +
+          '<div class="cr-meta">' + channelDot(p.channel) + (p.channel === 'whatsapp' ? esc(p.contato) : esc(p.contato)) +
+            (p.aiPaused ? '<span class="badge badge-warn" style="margin-left:4px;">IA pausada</span>' : '') +
+            (p.atendente ? '<span style="margin-left:auto;">' + esc(p.atendente) + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+      '</button>';
+    }).join('');
+
+    qsa('.conv-row', body).forEach(function (row) {
+      row.addEventListener('click', function () {
+        selectedPersonId = row.dataset.person;
+        renderConvList();
+        renderConvThread(selectedPersonId);
+      });
+    });
+  }
+
+  function renderConvThread(personId) {
+    var pane = qs('#conv-thread-pane');
+    var p = personById(personId);
+    if (!p) { pane.innerHTML = '<div class="empty-state">Selecione uma conversa.</div>'; return; }
+
+    composerMode = 'public';
+
+    pane.innerHTML =
+      '<div class="thread-head">' +
+        '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
+        '<div class="thread-head-info">' +
+          '<div class="thread-head-name">' + esc(p.nome) + '</div>' +
+          '<div class="thread-head-sub">' + channelDot(p.channel) + '<span class="mono">' + esc(p.contato) + '</span></div>' +
+        '</div>' +
+        '<div class="thread-ai-toggle"><span>IA ativa</span><button class="switch' + (p.aiPaused ? '' : ' on') + '" id="ai-toggle" aria-label="Alternar IA ativa"></button></div>' +
+      '</div>' +
+      '<div class="pinned-note" id="pinned-note">' +
+        '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5l2 4 4.2.7-3 3 .7 4.2L10 12.6l-3.9 1.8.7-4.2-3-3L8 6.5l2-4z"></path></svg>' +
+        '<span id="pinned-note-text">' + (p.pinnedNote ? esc(p.pinnedNote) : 'Nenhuma nota fixada — clique para adicionar uma nota rápida.') + '</span>' +
+      '</div>' +
+      '<div class="thread-body" id="thread-body"></div>' +
+      '<div class="composer">' +
+        '<div class="composer-mode">' +
+          '<button class="mode-public active" data-mode="public">Mensagem pública</button>' +
+          '<button class="mode-note" data-mode="note">Nota privada</button>' +
+        '</div>' +
+        '<div class="composer-row">' +
+          '<textarea class="input" id="composer-text" placeholder="Escreva uma mensagem..."></textarea>' +
+          '<button class="btn btn-primary" id="composer-send">Enviar</button>' +
+        '</div>' +
+      '</div>';
+
+    renderThreadBody(p);
+
+    qs('#ai-toggle').addEventListener('click', function () {
+      p.aiPaused = !p.aiPaused;
+      this.classList.toggle('on', !p.aiPaused);
+      renderConvList();
+    });
+
+    var pinnedNoteEl = qs('#pinned-note');
+    pinnedNoteEl.addEventListener('click', function (e) {
+      if (qs('input', pinnedNoteEl)) return;
+      var current = p.pinnedNote || '';
+      pinnedNoteEl.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5l2 4 4.2.7-3 3 .7 4.2L10 12.6l-3.9 1.8.7-4.2-3-3L8 6.5l2-4z"></path></svg><input type="text" value="' + esc(current) + '" placeholder="Escreva uma nota rápida sobre este lead...">';
+      var input = qs('input', pinnedNoteEl);
+      input.focus();
+      input.select();
+      input.addEventListener('blur', function () {
+        p.pinnedNote = input.value.trim();
+        renderConvThread(personId);
+      });
+      input.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') input.blur(); });
+    });
+
+    qsa('.composer-mode button', pane).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        composerMode = btn.dataset.mode;
+        qsa('.composer-mode button', pane).forEach(function (b) { b.classList.toggle('active', b === btn); });
+      });
+    });
+
+    function doSend() {
+      var textarea = qs('#composer-text');
+      var text = textarea.value.trim();
+      if (!text) return;
+      p.mensagens.push({ from: composerMode === 'note' ? 'note' : 'out', hora: nowHHMM(), texto: text });
+      p.recencia = 0;
+      textarea.value = '';
+      renderThreadBody(p);
+      renderConvList();
+    }
+    qs('#composer-send').addEventListener('click', doSend);
+    qs('#composer-text').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
+    });
+  }
+
+  function renderThreadBody(p) {
+    var body = qs('#thread-body');
+    body.innerHTML = p.mensagens.map(function (m) {
+      if (m.from === 'note') {
+        return '<div class="bubble bubble-note"><div class="bubble-note-label">Nota interna</div>' + esc(m.texto) + '<div class="bubble-time mono">' + esc(m.hora) + '</div></div>';
+      }
+      var cls = m.from === 'out' ? 'bubble-out' : 'bubble-in';
+      return '<div class="bubble ' + cls + '">' + esc(m.texto) + '<div class="bubble-time mono">' + esc(m.hora) + '</div></div>';
+    }).join('');
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function nowHHMM() {
+    var d = new Date();
+    var h = String(d.getHours()).padStart(2, '0');
+    var m = String(d.getMinutes()).padStart(2, '0');
+    return h + ':' + m;
+  }
+
+  qs('#conv-channel-filter').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    convChannelFilter = btn.dataset.channel;
+    qsa('button', this).forEach(function (b) { b.classList.toggle('active', b === btn); });
+    renderConvList();
+  });
+  qs('#conv-search').addEventListener('input', function () {
+    convSearchTerm = this.value;
+    renderConvList();
+  });
+
+  /* ============================= OPORTUNIDADES ============================= */
+
+  var draggedId = null;
+
+  function renderOportunidades() {
+    var total = DB.people.length;
+    var totalValue = DB.people.reduce(function (s, p) { return s + p.valor; }, 0);
+    qs('#opp-summary').textContent = 'Vendas · ' + total + ' oportunidade' + (total === 1 ? '' : 's') + ' · ' + formatBRL(totalValue) + ' no quadro';
+
+    var kanban = qs('#kanban');
+    kanban.innerHTML = STAGE_ORDER.map(function (stageKey) {
+      var cards = DB.people.filter(function (p) { return p.estagio === stageKey; });
+      var sum = cards.reduce(function (s, p) { return s + p.valor; }, 0);
+      return '<div class="kanban-column" data-stage="' + stageKey + '">' +
+        '<div class="kanban-col-head">' +
+          '<div class="kanban-col-title">' + STAGE_LABELS[stageKey] + ' <span class="mono" style="color:var(--ink-faint); font-weight:500;">(' + cards.length + ')</span></div>' +
+          '<div class="kanban-col-sum mono">' + formatBRL(sum) + '</div>' +
+        '</div>' +
+        '<div class="kanban-cards" data-stage-cards="' + stageKey + '">' +
+          cards.map(cardHtml).join('') +
+        '</div>' +
+        '<button class="btn btn-ghost btn-sm btn-block quick-add-btn" data-stage="' + stageKey + '">+ Oportunidade</button>' +
+      '</div>';
+    }).join('');
+
+    function cardHtml(p) {
+      return '<div class="opp-card" draggable="true" data-id="' + p.id + '">' +
+        '<div class="opp-name">' + esc(p.nome) + '</div>' +
+        (p.plano ? '<div class="opp-plan">' + esc(p.plano) + '</div>' : '') +
+        '<div class="opp-value mono">' + formatBRL(p.valor) + '</div>' +
+        '<div class="opp-tags">' + tempBadge(p.temperatura) + origemBadge(p.origem) + '</div>' +
+      '</div>';
+    }
+
+    qsa('.opp-card', kanban).forEach(function (card) {
+      card.addEventListener('dragstart', function () {
+        draggedId = card.dataset.id;
+        card.classList.add('dragging');
+      });
+      card.addEventListener('dragend', function () { card.classList.remove('dragging'); });
+    });
+
+    qsa('.kanban-column', kanban).forEach(function (col) {
+      col.addEventListener('dragover', function (e) { e.preventDefault(); col.classList.add('dragover'); });
+      col.addEventListener('dragleave', function () { col.classList.remove('dragover'); });
+      col.addEventListener('drop', function (e) {
+        e.preventDefault();
+        col.classList.remove('dragover');
+        if (!draggedId) return;
+        var person = personById(draggedId);
+        if (!person) return;
+        var newStage = col.dataset.stage;
+        person.estagio = newStage;
+        person.isClient = (newStage === 'fechado');
+        if (person.isClient && !person.clienteDesde) {
+          person.clienteDesde = new Date().toISOString().slice(0, 10);
+        }
+        draggedId = null;
+        renderOportunidades();
+      });
+    });
+
+    qsa('.quick-add-btn', kanban).forEach(function (btn) {
+      btn.addEventListener('click', function () { showQuickAddForm(btn); });
+    });
+  }
+
+  function showQuickAddForm(btn) {
+    var stage = btn.dataset.stage;
+    var cardsWrap = qs('.kanban-cards[data-stage-cards="' + stage + '"]');
+    if (qs('.quick-add-form', btn.parentElement)) return;
+    var form = document.createElement('div');
+    form.className = 'quick-add-form';
+    form.innerHTML =
+      '<input class="input" type="text" placeholder="Nome do lead" id="qa-name">' +
+      '<input class="input" type="text" placeholder="Valor (ex: 4800)" id="qa-value">' +
+      '<div class="quick-add-actions">' +
+        '<button class="btn btn-primary btn-sm" id="qa-add">Adicionar</button>' +
+        '<button class="btn btn-ghost btn-sm" id="qa-cancel">Cancelar</button>' +
+      '</div>';
+    btn.insertAdjacentElement('beforebegin', form);
+    btn.style.display = 'none';
+    qs('#qa-name', form).focus();
+
+    qs('#qa-cancel', form).addEventListener('click', function () { form.remove(); btn.style.display = ''; });
+    qs('#qa-add', form).addEventListener('click', function () {
+      var name = qs('#qa-name', form).value.trim();
+      var value = parseFloat(qs('#qa-value', form).value.replace(',', '.')) || 0;
+      if (!name) { qs('#qa-name', form).focus(); return; }
+      var id = 'p' + (nextPersonSeq++);
+      DB.people.push({
+        id: id, nome: name, channel: 'whatsapp', contato: '—', estagio: stage,
+        temperatura: 'morno', origem: 'organico', atendente: null, isClient: stage === 'fechado',
+        plano: null, valor: value, recencia: 1,
+        clienteDesde: stage === 'fechado' ? new Date().toISOString().slice(0, 10) : undefined,
+        aiPaused: false, pinnedNote: '',
+        mensagens: [{ from: 'in', hora: nowHHMM(), texto: 'Olá, gostaria de saber mais sobre a mentoria.' }]
+      });
+      renderOportunidades();
+    });
+  }
+
+  /* ============================= CLIENTES ============================= */
+
+  function renderClientes() {
+    var term = (qs('#clientes-search').value || '').toLowerCase();
+    var grid = qs('#clientes-grid');
+    var clients = DB.people.filter(function (p) { return p.isClient && p.nome.toLowerCase().indexOf(term) !== -1; });
+
+    if (!clients.length) {
+      grid.innerHTML = '<div class="empty-state">Nenhum cliente encontrado.</div>';
+      return;
+    }
+
+    grid.innerHTML = clients.map(function (p) {
+      var since = p.clienteDesde ? new Date(p.clienteDesde + 'T00:00:00').toLocaleDateString('pt-BR') : '—';
+      return '<div class="card">' +
+        '<div class="cliente-card-top">' +
+          '<div class="initials">' + esc(initials(p.nome)) + '</div>' +
+          '<div>' +
+            '<div class="cliente-name">' + esc(p.nome) + '</div>' +
+            '<div class="cliente-plan">' + esc(p.plano || '') + '</div>' +
+          '</div>' +
+          '<span class="badge badge-good" style="margin-left:auto;">Ativo</span>' +
+        '</div>' +
+        '<div class="cliente-row"><span class="cliente-row-label">Valor pago</span><span class="mono">' + formatBRL(p.valor) + '</span></div>' +
+        '<div class="cliente-row"><span class="cliente-row-label">Cliente desde</span><span class="mono">' + esc(since) + '</span></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  qs('#clientes-search').addEventListener('input', renderClientes);
+
+  /* ============================= PESSOAS ============================= */
+
+  function renderPessoas() {
+    var term = (qs('#pessoas-search').value || '').toLowerCase();
+    var origemFilter = qs('#pessoas-origem-filter').value;
+    var tbody = qs('#pessoas-tbody');
+
+    var rows = DB.people.filter(function (p) {
+      if (term && p.nome.toLowerCase().indexOf(term) === -1) return false;
+      if (origemFilter !== 'todas' && p.origem !== origemFilter) return false;
+      return true;
+    });
+
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Nenhuma pessoa encontrada.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = rows.map(function (p) {
+      var statusBadge = p.isClient ? '<span class="badge badge-good">Cliente</span>' : '<span class="badge badge-accent">' + esc(STAGE_LABELS[p.estagio]) + '</span>';
+      return '<tr>' +
+        '<td><div class="person-name-cell"><div class="initials" style="width:28px;height:28px;font-size:10.5px;">' + esc(initials(p.nome)) + '</div>' + esc(p.nome) + '</div></td>' +
+        '<td class="mono">' + channelDot(p.channel) + ' ' + esc(p.contato) + '</td>' +
+        '<td>' + origemBadge(p.origem) + '</td>' +
+        '<td>' + statusBadge + '</td>' +
+        '<td>' + (p.atendente ? esc(p.atendente) : '<span style="color:var(--ink-faint);">—</span>') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  qs('#pessoas-search').addEventListener('input', renderPessoas);
+  qs('#pessoas-origem-filter').addEventListener('change', renderPessoas);
+
+  /* ============================= DISPAROS ============================= */
+
+  var bcAudienceTab = 'lista';
+  var bcScheduleMode = 'agora';
+
+  function renderDisparos() {
+    var listEl = qs('#broadcast-list');
+    listEl.innerHTML = DB.broadcasts.map(function (b) {
+      var pct = Math.round((b.enviados / b.total) * 100);
+      var statusBadge = b.status === 'concluido' ? '<span class="badge badge-good">Concluído</span>' : '<span class="badge badge-warn">Enviando</span>';
+      return '<div class="broadcast-row" data-id="' + b.id + '">' +
+        '<div class="broadcast-info">' +
+          '<div class="broadcast-name">' + esc(b.nome) + '</div>' +
+          '<div class="broadcast-meta">' + channelDot(b.canal) + (b.canal === 'whatsapp' ? 'WhatsApp' : 'Instagram') + '</div>' +
+        '</div>' +
+        '<div class="broadcast-progress-wrap">' +
+          '<div class="progress"><span style="width:' + pct + '%;"></span></div>' +
+          '<div class="progress-label mono">' + b.enviados + '/' + b.total + ' enviados</div>' +
+        '</div>' +
+        statusBadge +
+      '</div>';
+    }).join('');
+
+    renderAudienceList();
+  }
+
+  function renderAudienceList() {
+    var wrap = qs('#bc-audience-lista');
+    if (!wrap) return;
+    wrap.innerHTML = DB.people.map(function (p) {
+      return '<label class="audience-item"><input type="checkbox" value="' + p.id + '"> ' + esc(p.nome) + ' <span style="margin-left:auto; color:var(--ink-faint); font-size:11.5px;">' + esc(ORIGEM_LABELS[p.origem]) + '</span></label>';
+    }).join('');
+  }
+
+  qs('#btn-new-broadcast').addEventListener('click', function () {
+    qs('#new-broadcast-form').style.display = 'block';
+    this.style.display = 'none';
+  });
+  qs('#btn-cancel-broadcast').addEventListener('click', function () {
+    qs('#new-broadcast-form').style.display = 'none';
+    qs('#btn-new-broadcast').style.display = '';
+  });
+
+  qs('#bc-audience-tabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    bcAudienceTab = btn.dataset.tab;
+    qsa('button', this).forEach(function (b) { b.classList.toggle('active', b === btn); });
+    qs('#bc-audience-lista').style.display = bcAudienceTab === 'lista' ? '' : 'none';
+    qs('#bc-audience-manual').style.display = bcAudienceTab === 'manual' ? '' : 'none';
+  });
+
+  qs('#bc-schedule-toggle').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    bcScheduleMode = btn.dataset.mode;
+    qsa('button', this).forEach(function (b) { b.classList.toggle('active', b === btn); });
+    qs('#bc-schedule-datetime').style.display = bcScheduleMode === 'agendado' ? '' : 'none';
+  });
+
+  qs('#btn-submit-broadcast').addEventListener('click', function () {
+    var name = qs('#bc-name').value.trim() || 'Disparo sem nome';
+    var channel = qs('#bc-channel').value;
+    var newBroadcast = { id: 'b' + (DB.broadcasts.length + 1 + Math.floor(Math.random() * 1000)), nome: name, canal: channel, status: 'enviando', enviados: 0, total: 100 + Math.floor(Math.random() * 40) };
+    DB.broadcasts.unshift(newBroadcast);
+    renderDisparos();
+    qs('#new-broadcast-form').style.display = 'none';
+    qs('#btn-new-broadcast').style.display = '';
+    qs('#bc-name').value = '';
+    animateBroadcastProgress(newBroadcast.id);
+  });
+
+  function animateBroadcastProgress(id) {
+    var broadcast = null;
+    for (var i = 0; i < DB.broadcasts.length; i++) if (DB.broadcasts[i].id === id) broadcast = DB.broadcasts[i];
+    if (!broadcast) return;
+    var interval = setInterval(function () {
+      broadcast.enviados = Math.min(broadcast.total, broadcast.enviados + Math.ceil(broadcast.total / 14));
+      if (broadcast.enviados >= broadcast.total) {
+        broadcast.status = 'concluido';
+        clearInterval(interval);
+      }
+      var view = qs('#view-disparos');
+      if (view && !view.hidden) renderDisparos();
+    }, 350);
+  }
+
+  /* ============================= FLUXOS ============================= */
+
+  var selectedFlowId = 'f1';
+
+  function renderFluxos() {
+    var listEl = qs('#flow-list');
+    listEl.innerHTML = DB.flows.map(function (f) {
+      return '<div class="flow-list-item' + (f.id === selectedFlowId ? ' selected' : '') + '" data-id="' + f.id + '">' +
+        '<div class="fli-body">' +
+          '<div class="fli-name">' + esc(f.nome) + '</div>' +
+          '<div class="fli-trigger">Gatilho: ' + esc(f.trigger) + '</div>' +
+        '</div>' +
+        '<button class="switch' + (f.ativo ? ' on' : '') + '" data-toggle="' + f.id + '" aria-label="Ativar ou desativar fluxo"></button>' +
+      '</div>';
+    }).join('');
+
+    qsa('.flow-list-item', listEl).forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        if (e.target.closest('.switch')) return;
+        selectedFlowId = item.dataset.id;
+        renderFluxos();
+      });
+    });
+    qsa('.switch', listEl).forEach(function (sw) {
+      sw.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var flow = DB.flows.find(function (f) { return f.id === sw.dataset.toggle; });
+        flow.ativo = !flow.ativo;
+        renderFluxos();
+      });
+    });
+
+    renderFlowDetail();
+  }
+
+  function renderFlowDetail() {
+    var detail = qs('#flow-detail');
+    var flow = DB.flows.find(function (f) { return f.id === selectedFlowId; });
+    if (!flow) { detail.innerHTML = '<div class="empty-state">Selecione um fluxo.</div>'; return; }
+    detail.innerHTML =
+      '<div class="card-title">' + esc(flow.nome) + '</div>' +
+      '<div class="view-sub">Gatilho: ' + esc(flow.trigger) + ' · Status: ' + (flow.ativo ? '<span class="badge badge-good">Ativo</span>' : '<span class="badge badge-neutral">Inativo</span>') + '</div>' +
+      '<div class="flow-chain">' +
+        '<div class="flow-box flow-box-trigger"><div class="flow-box-label">Trigger</div><div class="flow-box-text">' + esc(flow.chain.trigger) + '</div></div>' +
+        '<div class="flow-arrow">' + arrowSvg() + '</div>' +
+        '<div class="flow-box flow-box-cond"><div class="flow-box-label">Condição</div><div class="flow-box-text">' + esc(flow.chain.cond) + '</div></div>' +
+        '<div class="flow-arrow">' + arrowSvg() + '</div>' +
+        '<div class="flow-box flow-box-action"><div class="flow-box-label">Ação</div><div class="flow-box-text">' + esc(flow.chain.action) + '</div></div>' +
+      '</div>';
+  }
+
+  function arrowSvg() {
+    return '<svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h13M11 5l5 5-5 5"></path></svg>';
+  }
+
+  /* ============================= ATENDENTE IA ============================= */
+
+  var iaActiveTab = 'agente';
+
+  qs('#ia-tabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    iaActiveTab = btn.dataset.tab;
+    qsa('.tab-btn', this).forEach(function (b) { b.classList.toggle('active', b === btn); });
+    renderIaTabContent();
+  });
+
+  function renderAtendenteIA() {
+    qsa('.tab-btn', qs('#ia-tabs')).forEach(function (b) { b.classList.toggle('active', b.dataset.tab === iaActiveTab); });
+    renderIaTabContent();
+  }
+
+  function renderIaTabContent() {
+    var content = qs('#ia-tab-content');
+    if (iaActiveTab === 'agente') {
+      content.innerHTML =
+        '<div class="field">' +
+          '<label>Prompt do agente</label>' +
+          '<textarea class="input" id="ia-prompt" style="min-height:280px; font-family:\'IBM Plex Mono\', ui-monospace, monospace; font-size:12.5px; line-height:1.6;"></textarea>' +
+        '</div>' +
+        '<div class="card">' +
+          '<div class="card-title">Variáveis</div>' +
+          '<div id="ia-vars"></div>' +
+          '<button class="btn btn-ghost btn-sm" id="ia-var-add">+ Adicionar variável</button>' +
+        '</div>';
+      qs('#ia-prompt').value = DB.aiAgent.prompt;
+      qs('#ia-prompt').addEventListener('input', function () { DB.aiAgent.prompt = this.value; });
+      renderIaVars();
+      qs('#ia-var-add').addEventListener('click', function () {
+        DB.aiAgent.variaveis.push({ chave: '', valor: '' });
+        renderIaVars();
+      });
+    } else if (iaActiveTab === 'midias') {
+      content.innerHTML =
+        '<div class="media-grid">' +
+          DB.media.map(function (m) {
+            return '<div class="card">' +
+              '<div class="media-thumb" style="background:' + m.cor + ';"></div>' +
+              '<div class="media-name">' + esc(m.nome) + '</div>' +
+              '<div class="media-type">' + esc(m.tipo) + '</div>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+        '<button class="btn btn-ghost" style="margin-top:16px;">Enviar mídia</button>';
+    } else if (iaActiveTab === 'base') {
+      content.innerHTML = DB.knowledge.map(function (k, idx) {
+        return '<div class="kb-item" data-idx="' + idx + '">' +
+          '<div class="kb-header">' + esc(k.titulo) +
+            '<span class="kb-chevron"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5l5 5 5-5"></path></svg></span>' +
+          '</div>' +
+          '<div class="kb-body">' + esc(k.texto) + '</div>' +
+        '</div>';
+      }).join('');
+      qsa('.kb-header', content).forEach(function (h) {
+        h.addEventListener('click', function () { h.parentElement.classList.toggle('open'); });
+      });
+    } else if (iaActiveTab === 'horario') {
+      content.innerHTML = '<div class="card">' + DB.schedule.map(function (s, idx) {
+        return '<div class="schedule-row' + (s.ativo ? '' : ' disabled') + '" data-idx="' + idx + '">' +
+          '<div class="schedule-day">' + esc(s.dia) + '</div>' +
+          '<button class="switch' + (s.ativo ? ' on' : '') + '" data-sched-toggle="' + idx + '" aria-label="Ativar atendimento em ' + esc(s.dia) + '"></button>' +
+          '<input class="input" type="time" value="' + esc(s.inicio) + '" data-sched-inicio="' + idx + '" ' + (s.ativo ? '' : 'disabled') + '>' +
+          '<input class="input" type="time" value="' + esc(s.fim) + '" data-sched-fim="' + idx + '" ' + (s.ativo ? '' : 'disabled') + '>' +
+        '</div>';
+      }).join('') + '</div>';
+
+      qsa('[data-sched-toggle]', content).forEach(function (sw) {
+        sw.addEventListener('click', function () {
+          var idx = Number(sw.dataset.schedToggle);
+          DB.schedule[idx].ativo = !DB.schedule[idx].ativo;
+          renderIaTabContent();
+        });
+      });
+      qsa('[data-sched-inicio]', content).forEach(function (inp) {
+        inp.addEventListener('change', function () { DB.schedule[Number(inp.dataset.schedInicio)].inicio = inp.value; });
+      });
+      qsa('[data-sched-fim]', content).forEach(function (inp) {
+        inp.addEventListener('change', function () { DB.schedule[Number(inp.dataset.schedFim)].fim = inp.value; });
+      });
+    }
+  }
+
+  function renderIaVars() {
+    var wrap = qs('#ia-vars');
+    wrap.innerHTML = DB.aiAgent.variaveis.map(function (v, idx) {
+      return '<div class="var-row" data-idx="' + idx + '">' +
+        '<input class="input mono" data-var-key="' + idx + '" value="' + esc(v.chave) + '" placeholder="chave">' +
+        '<input class="input" data-var-val="' + idx + '" value="' + esc(v.valor) + '" placeholder="valor">' +
+        '<button class="var-remove" data-var-remove="' + idx + '" aria-label="Remover variável">&times;</button>' +
+      '</div>';
+    }).join('');
+    qsa('[data-var-key]', wrap).forEach(function (inp) {
+      inp.addEventListener('input', function () { DB.aiAgent.variaveis[Number(inp.dataset.varKey)].chave = inp.value; });
+    });
+    qsa('[data-var-val]', wrap).forEach(function (inp) {
+      inp.addEventListener('input', function () { DB.aiAgent.variaveis[Number(inp.dataset.varVal)].valor = inp.value; });
+    });
+    qsa('[data-var-remove]', wrap).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        DB.aiAgent.variaveis.splice(Number(btn.dataset.varRemove), 1);
+        renderIaVars();
+      });
+    });
+  }
+
+  /* ============================= AJUSTES ============================= */
+
+  var ajustesActiveTab = 'perfil';
+
+  qs('#ajustes-tabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    ajustesActiveTab = btn.dataset.tab;
+    qsa('.tab-btn', this).forEach(function (b) { b.classList.toggle('active', b === btn); });
+    renderAjustesTabContent();
+  });
+
+  function renderAjustes() {
+    qsa('.tab-btn', qs('#ajustes-tabs')).forEach(function (b) { b.classList.toggle('active', b.dataset.tab === ajustesActiveTab); });
+    renderAjustesTabContent();
+  }
+
+  function renderAjustesTabContent() {
+    var content = qs('#ajustes-tab-content');
+    if (ajustesActiveTab === 'perfil') {
+      var b = DB.business;
+      content.innerHTML =
+        '<div class="card" style="max-width:640px;">' +
+          '<div class="field"><label>Nome da empresa</label><input class="input" id="pf-nome" value="' + esc(b.nome_da_empresa) + '"></div>' +
+          '<div class="field"><label>Segmento</label><input class="input" id="pf-segmento" value="' + esc(b.segmento) + '"></div>' +
+          '<div class="field"><label>Nome do agente de IA</label><input class="input" id="pf-agente" value="' + esc(b.nome_do_agente) + '"></div>' +
+          '<div class="field"><label>Produto principal</label><input class="input" id="pf-produto" value="' + esc(b.produto_principal) + '"></div>' +
+          '<div class="field"><label>Público-alvo</label><textarea class="input" id="pf-publico" style="min-height:60px;">' + esc(b.publico_alvo) + '</textarea></div>' +
+          '<div class="field" style="margin-bottom:6px;"><label>Resultado entregue</label><textarea class="input" id="pf-resultado" style="min-height:60px;">' + esc(b.resultado_entregue) + '</textarea></div>' +
+          '<button class="btn btn-primary" id="pf-save">Salvar alterações</button>' +
+        '</div>';
+      qs('#pf-nome').addEventListener('input', function () { DB.business.nome_da_empresa = this.value; });
+      qs('#pf-segmento').addEventListener('input', function () { DB.business.segmento = this.value; });
+      qs('#pf-agente').addEventListener('input', function () { DB.business.nome_do_agente = this.value; });
+      qs('#pf-produto').addEventListener('input', function () { DB.business.produto_principal = this.value; });
+      qs('#pf-publico').addEventListener('input', function () { DB.business.publico_alvo = this.value; });
+      qs('#pf-resultado').addEventListener('input', function () { DB.business.resultado_entregue = this.value; });
+      qs('#pf-save').addEventListener('click', function () { showToast('Perfil do negócio atualizado.'); });
+    } else {
+      content.innerHTML =
+        '<div class="card" style="max-width:520px;">' +
+          '<div id="team-list"></div>' +
+          '<button class="btn btn-ghost btn-sm" id="team-invite-btn" style="margin-top:10px;">+ Convidar</button>' +
+          '<div id="team-invite-form" style="display:none;"></div>' +
+        '</div>';
+      renderTeamList();
+      qs('#team-invite-btn').addEventListener('click', function () {
+        var formWrap = qs('#team-invite-form');
+        formWrap.style.display = 'block';
+        formWrap.innerHTML =
+          '<div class="invite-form">' +
+            '<input class="input" type="email" id="invite-email" placeholder="email@exemplo.com">' +
+            '<select class="input" id="invite-role" style="max-width:150px;"><option>Vendas</option><option>Atendimento</option><option>Owner</option></select>' +
+            '<button class="btn btn-primary btn-sm" id="invite-submit">Convidar</button>' +
+          '</div>';
+        qs('#invite-submit').addEventListener('click', function () {
+          var email = qs('#invite-email').value.trim();
+          if (!email) return;
+          DB.team.push({ id: 't' + (DB.team.length + 1), nome: email, papel: qs('#invite-role').value, pendente: true });
+          formWrap.style.display = 'none';
+          renderTeamList();
+        });
+        qs('#team-invite-btn').style.display = 'none';
+      });
+    }
+  }
+
+  function renderTeamList() {
+    qs('#team-list').innerHTML = DB.team.map(function (m) {
+      return '<div class="team-row">' +
+        '<div class="initials">' + esc(initials(m.nome)) + '</div>' +
+        '<div style="flex:1; min-width:0;">' +
+          '<div class="team-name">' + esc(m.nome) + '</div>' +
+          (m.pendente ? '<div class="team-email">Convite pendente</div>' : '') +
+        '</div>' +
+        '<span class="badge ' + (m.pendente ? 'badge-warn' : 'badge-accent') + '">' + esc(m.papel) + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  /* ============================= CONTAS ============================= */
+
+  function renderContas() {
+    var grid = qs('#accounts-grid');
+    var wa = DB.channels.whatsapp;
+    var ig = DB.channels.instagram;
+
+    grid.innerHTML =
+      '<div class="card" id="account-wa">' +
+        '<div class="account-card-head">' +
+          '<div class="account-glyph wa">' + waSvg() + '</div>' +
+          '<div><div class="account-title">WhatsApp</div></div>' +
+          '<span class="badge badge-good" style="margin-left:auto;">Conectado</span>' +
+        '</div>' +
+        '<div class="mono" style="font-size:15px; font-weight:600;">' + esc(wa.numero) + '</div>' +
+        '<div class="account-actions">' +
+          '<button class="btn btn-ghost btn-sm">Trocar número</button>' +
+          '<button class="btn btn-danger btn-sm">Desconectar</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card" id="account-ig"></div>';
+
+    renderInstagramCard();
+  }
+
+  function waSvg() {
+    return '<svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5l1-3.3a6.5 6.5 0 113.9 3.1L4 16.5z"></path><path d="M7.3 8.6c0 2.3 1.9 4.1 4.1 4.1"></path></svg>';
+  }
+  function igSvg() {
+    return '<svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="4"></rect><circle cx="10" cy="10" r="3.2"></circle><circle cx="14.3" cy="5.7" r="0.6" fill="currentColor" stroke="none"></circle></svg>';
+  }
+
+  function renderInstagramCard() {
+    var card = qs('#account-ig');
+    var ig = DB.channels.instagram;
+    if (ig.conectado) {
+      card.innerHTML =
+        '<div class="account-card-head">' +
+          '<div class="account-glyph ig">' + igSvg() + '</div>' +
+          '<div><div class="account-title">Instagram</div></div>' +
+          '<span class="badge badge-good" style="margin-left:auto;">Conectado</span>' +
+        '</div>' +
+        '<div class="mono" style="font-size:15px; font-weight:600;">' + esc(ig.handle) + '</div>' +
+        '<div class="account-actions">' +
+          '<button class="btn btn-danger btn-sm">Desconectar</button>' +
+        '</div>';
+      return;
+    }
+    card.innerHTML =
+      '<div class="account-card-head">' +
+        '<div class="account-glyph ig">' + igSvg() + '</div>' +
+        '<div><div class="account-title">Instagram</div></div>' +
+        '<span class="badge badge-neutral" style="margin-left:auto;">Desconectado</span>' +
+      '</div>' +
+      '<p style="color:var(--ink-muted); font-size:13px; margin-bottom:14px;">Conecte sua conta do Instagram para atender comentários e mensagens diretas pela plataforma.</p>' +
+      '<button class="btn btn-primary" id="ig-connect-btn">Conectar</button>';
+
+    qs('#ig-connect-btn').addEventListener('click', function () {
+      card.innerHTML =
+        '<div class="account-card-head">' +
+          '<div class="account-glyph ig">' + igSvg() + '</div>' +
+          '<div><div class="account-title">Instagram</div></div>' +
+        '</div>' +
+        '<div class="qr-wrap">' +
+          '<div class="qr" id="qr-pattern"></div>' +
+          '<div class="qr-caption">Escaneie com o Instagram para conectar</div>' +
+        '</div>';
+      buildQrPattern(qs('#qr-pattern'));
+      setTimeout(function () {
+        ig.conectado = true;
+        renderInstagramCard();
+        showToast('Instagram conectado com sucesso');
+      }, 2500);
+    });
+  }
+
+  function buildQrPattern(container) {
+    var cells = 121;
+    var html = '';
+    for (var i = 0; i < cells; i++) {
+      var row = Math.floor(i / 11);
+      var col = i % 11;
+      var isFinder = (row < 3 && col < 3) || (row < 3 && col > 7) || (row > 7 && col < 3);
+      var on = isFinder ? ((row + col) % 5 !== 0) : (((row * 13 + col * 7 + row * col) % 3) === 0);
+      html += '<div class="qr-cell' + (on ? ' on' : '') + '"></div>';
+    }
+    container.innerHTML = html;
+  }
+
+  /* ============================= INIT ============================= */
+
+  go('painel');
+})();
+</script>
