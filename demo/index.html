@@ -175,12 +175,16 @@
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 18px;
-    overflow-y: auto;
+    overflow: hidden;
     padding: 32px;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
-  .view { display: flex; flex-direction: column; min-height: 100%; }
+  .view { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .view[hidden] { display: none; }
+  .view-scroll { flex: 1; min-height: 0; overflow-y: auto; }
   @media (prefers-reduced-motion: no-preference) {
     .view.anim { animation: viewIn 220ms ease both; }
   }
@@ -371,7 +375,6 @@
     gap: 16px;
     flex: 1;
     min-height: 0;
-    height: calc(100vh - 190px);
   }
   .conv-list-pane {
     flex: 0 0 320px;
@@ -483,17 +486,19 @@
   }
 
   /* ---------- Oportunidades ---------- */
-  .kanban-wrap { overflow-x: auto; padding-bottom: 8px; }
-  .kanban { display: flex; gap: 16px; min-width: 900px; }
+  .kanban-wrap { overflow-x: auto; overflow-y: hidden; padding-bottom: 8px; flex: 1; min-height: 0; }
+  .kanban { display: flex; gap: 16px; min-width: 900px; height: 100%; }
   .kanban-column {
     flex: 1 1 0;
     min-width: 250px;
+    height: 100%;
     background: var(--surface-raised);
     border: 1px solid var(--line);
     border-radius: 14px;
     padding: 14px;
     display: flex; flex-direction: column; gap: 10px;
   }
+  .kanban-cards { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
   .kanban-column.dragover { border-color: var(--accent); background: var(--accent-soft); }
   .kanban-col-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
   .kanban-col-title { font-weight: 700; font-size: 13px; }
@@ -569,7 +574,9 @@
   .audience-item:hover { background: var(--surface-hover); }
 
   /* ---------- Fluxos ---------- */
-  .fluxos-layout { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+  .fluxos-layout { display: flex; gap: 20px; flex: 1; min-height: 0; }
+  #flow-list { flex: 0 0 320px; height: 100%; overflow-y: auto; }
+  #flow-detail { flex: 1; min-width: 0; height: 100%; overflow-y: auto; }
   .flow-list-item { display: flex; align-items: center; gap: 10px; padding: 14px; cursor: pointer; }
   .flow-list-item + .flow-list-item { border-top: 1px solid var(--line); }
   .flow-list-item.selected { background: var(--accent-soft); }
@@ -723,34 +730,36 @@
     <section class="view" id="view-painel" hidden>
       <div class="eyebrow">Seção</div>
       <h1>Painel</h1>
-      <div class="stats-row">
-        <div class="card stat-tile">
-          <div class="stat-label">Previsão ponderada</div>
-          <div class="stat-value mono" id="stat-previsao">—</div>
-        </div>
-        <div class="card stat-tile">
-          <div class="stat-label">Oportunidades abertas</div>
-          <div class="stat-value mono" id="stat-abertas">—</div>
-        </div>
-        <div class="card stat-tile">
-          <div class="stat-label">Valor em aberto</div>
-          <div class="stat-value mono" id="stat-valor-aberto">—</div>
-        </div>
-        <div class="card stat-tile">
-          <div class="stat-label">Conversas hoje</div>
-          <div class="stat-value mono" id="stat-conversas-hoje">—</div>
-        </div>
-      </div>
-      <div class="painel-grid">
-        <div class="card">
-          <div class="card-title">Novas conversas — últimos 7 dias</div>
-          <div class="chart-canvas-wrap">
-            <canvas id="chart-conversas" height="220"></canvas>
+      <div class="view-scroll">
+        <div class="stats-row">
+          <div class="card stat-tile">
+            <div class="stat-label">Previsão ponderada</div>
+            <div class="stat-value mono" id="stat-previsao">—</div>
+          </div>
+          <div class="card stat-tile">
+            <div class="stat-label">Oportunidades abertas</div>
+            <div class="stat-value mono" id="stat-abertas">—</div>
+          </div>
+          <div class="card stat-tile">
+            <div class="stat-label">Valor em aberto</div>
+            <div class="stat-value mono" id="stat-valor-aberto">—</div>
+          </div>
+          <div class="card stat-tile">
+            <div class="stat-label">Conversas hoje</div>
+            <div class="stat-value mono" id="stat-conversas-hoje">—</div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-title">Conversas recentes</div>
-          <div class="recent-list" id="recent-list"></div>
+        <div class="painel-grid">
+          <div class="card">
+            <div class="card-title">Novas conversas — últimos 7 dias</div>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-conversas" height="220"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Conversas recentes</div>
+            <div class="recent-list" id="recent-list"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -792,7 +801,9 @@
         <h1 style="margin-bottom:14px;">Clientes</h1>
         <input class="input" id="clientes-search" type="text" placeholder="Buscar cliente por nome..." style="max-width:320px;">
       </div>
-      <div class="clientes-grid" id="clientes-grid"></div>
+      <div class="view-scroll">
+        <div class="clientes-grid" id="clientes-grid"></div>
+      </div>
     </section>
 
     <section class="view" id="view-pessoas" hidden>
@@ -809,19 +820,21 @@
           </select>
         </div>
       </div>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Telefone / Instagram</th>
-              <th>Origem</th>
-              <th>Estágio / Status</th>
-              <th>Atendente</th>
-            </tr>
-          </thead>
-          <tbody id="pessoas-tbody"></tbody>
-        </table>
+      <div class="view-scroll">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Telefone / Instagram</th>
+                <th>Origem</th>
+                <th>Estágio / Status</th>
+                <th>Atendente</th>
+              </tr>
+            </thead>
+            <tbody id="pessoas-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -835,51 +848,53 @@
         <button class="btn btn-primary" id="btn-new-broadcast">+ Novo disparo</button>
       </div>
 
-      <div class="card" id="new-broadcast-form" style="margin-bottom:20px; display:none;">
-        <div class="card-title">Novo disparo</div>
-        <div class="field-row">
-          <div class="field">
-            <label>Nome do disparo</label>
-            <input class="input" id="bc-name" type="text" placeholder="Ex: Convite Imersão Presencial — Outubro">
+      <div class="view-scroll">
+        <div class="card" id="new-broadcast-form" style="margin-bottom:20px; display:none;">
+          <div class="card-title">Novo disparo</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Nome do disparo</label>
+              <input class="input" id="bc-name" type="text" placeholder="Ex: Convite Imersão Presencial — Outubro">
+            </div>
+            <div class="field">
+              <label>Conta de envio</label>
+              <select class="input" id="bc-channel">
+                <option value="whatsapp">WhatsApp — Voar Mentoria</option>
+                <option value="instagram">Instagram — @voarmentoria</option>
+              </select>
+            </div>
           </div>
           <div class="field">
-            <label>Conta de envio</label>
-            <select class="input" id="bc-channel">
-              <option value="whatsapp">WhatsApp — Voar Mentoria</option>
-              <option value="instagram">Instagram — @voarmentoria</option>
-            </select>
+            <label>Mensagem</label>
+            <textarea class="input" id="bc-message" placeholder="Escreva a mensagem do disparo...">Oi {nome}! Abrimos novas vagas para a próxima turma da Voar Mentoria. Quer que eu te conte mais? 😊</textarea>
+            <div class="field-hint">Use {nome} para personalizar a mensagem com o nome de cada pessoa.</div>
+          </div>
+          <div class="field">
+            <label>Público</label>
+            <div class="audience-tabs" id="bc-audience-tabs">
+              <button data-tab="lista" class="active">Selecionar da lista</button>
+              <button data-tab="manual">Colar lista manual</button>
+            </div>
+            <div id="bc-audience-lista" class="audience-list"></div>
+            <textarea class="input" id="bc-audience-manual" style="display:none;" placeholder="Cole números ou @usuários, um por linha..."></textarea>
+          </div>
+          <div class="field">
+            <label>Envio</label>
+            <div class="pill-toggle" id="bc-schedule-toggle" style="max-width:280px;">
+              <button data-mode="agora" class="active">Enviar agora</button>
+              <button data-mode="agendado">Agendar</button>
+            </div>
+            <input class="input" id="bc-schedule-datetime" type="datetime-local" style="display:none; margin-top:10px; max-width:280px;">
+          </div>
+          <div style="display:flex; gap:10px; margin-top:6px;">
+            <button class="btn btn-primary" id="btn-submit-broadcast">Enviar disparo</button>
+            <button class="btn btn-ghost" id="btn-cancel-broadcast">Cancelar</button>
           </div>
         </div>
-        <div class="field">
-          <label>Mensagem</label>
-          <textarea class="input" id="bc-message" placeholder="Escreva a mensagem do disparo...">Oi {nome}! Abrimos novas vagas para a próxima turma da Voar Mentoria. Quer que eu te conte mais? 😊</textarea>
-          <div class="field-hint">Use {nome} para personalizar a mensagem com o nome de cada pessoa.</div>
-        </div>
-        <div class="field">
-          <label>Público</label>
-          <div class="audience-tabs" id="bc-audience-tabs">
-            <button data-tab="lista" class="active">Selecionar da lista</button>
-            <button data-tab="manual">Colar lista manual</button>
-          </div>
-          <div id="bc-audience-lista" class="audience-list"></div>
-          <textarea class="input" id="bc-audience-manual" style="display:none;" placeholder="Cole números ou @usuários, um por linha..."></textarea>
-        </div>
-        <div class="field">
-          <label>Envio</label>
-          <div class="pill-toggle" id="bc-schedule-toggle" style="max-width:280px;">
-            <button data-mode="agora" class="active">Enviar agora</button>
-            <button data-mode="agendado">Agendar</button>
-          </div>
-          <input class="input" id="bc-schedule-datetime" type="datetime-local" style="display:none; margin-top:10px; max-width:280px;">
-        </div>
-        <div style="display:flex; gap:10px; margin-top:6px;">
-          <button class="btn btn-primary" id="btn-submit-broadcast">Enviar disparo</button>
-          <button class="btn btn-ghost" id="btn-cancel-broadcast">Cancelar</button>
-        </div>
-      </div>
 
-      <div class="card" style="padding:0;">
-        <div id="broadcast-list"></div>
+        <div class="card" style="padding:0;">
+          <div id="broadcast-list"></div>
+        </div>
       </div>
     </section>
 
@@ -901,7 +916,9 @@
         <button class="tab-btn" data-tab="base">Base de Conhecimento</button>
         <button class="tab-btn" data-tab="horario">Horário de atendimento</button>
       </div>
-      <div id="ia-tab-content"></div>
+      <div class="view-scroll">
+        <div id="ia-tab-content"></div>
+      </div>
     </section>
 
     <section class="view" id="view-ajustes" hidden>
@@ -911,13 +928,17 @@
         <button class="tab-btn active" data-tab="perfil">Perfil do negócio</button>
         <button class="tab-btn" data-tab="equipe">Equipe</button>
       </div>
-      <div id="ajustes-tab-content"></div>
+      <div class="view-scroll">
+        <div id="ajustes-tab-content"></div>
+      </div>
     </section>
 
     <section class="view" id="view-contas" hidden>
       <div class="eyebrow">Seção</div>
       <h1>Contas</h1>
-      <div class="accounts-grid" id="accounts-grid"></div>
+      <div class="view-scroll">
+        <div class="accounts-grid" id="accounts-grid"></div>
+      </div>
     </section>
 
   </main>
